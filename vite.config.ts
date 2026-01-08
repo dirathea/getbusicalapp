@@ -12,4 +12,18 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      // Proxy /proxy requests to Cloudflare Worker running on port 8787
+      '/proxy': {
+        target: 'http://localhost:8787',
+        changeOrigin: true,
+      },
+      // Health check endpoint
+      '/health': {
+        target: 'http://localhost:8787',
+        changeOrigin: true,
+      },
+    },
+  },
 })

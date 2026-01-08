@@ -6,6 +6,8 @@ A privacy-first Progressive Web App (PWA) that helps you sync personal calendar 
 
 - **Privacy-First**: Events sync as "Synced Event" marked as busy to protect your privacy
 - **No Authentication Required**: Uses calendar deeplinks - no OAuth, no backend
+- **CORS Proxy Built-in**: Cloudflare Worker handles ICS fetching to bypass browser CORS restrictions
+- **Edit Calendar URL**: Easily change your source calendar with one click
 - **Multiple Platforms**: Sync to Google Calendar, Outlook Calendar, or download .ics files
 - **Week View Toggle**: View events for this week or next week
 - **Offline-Capable**: PWA with localStorage caching
@@ -62,15 +64,43 @@ The app will be available at `http://localhost:5173`
 4. Copy the URL
 5. Replace "webcal://" with "https://" in the URL
 
+## CORS Proxy Architecture
+
+SnapCal uses a Cloudflare Worker as a CORS proxy to fetch ICS calendar files. This is necessary because browsers block direct requests to calendar URLs due to CORS (Cross-Origin Resource Sharing) restrictions.
+
+### How It Works
+
+1. **User enters ICS URL** → Frontend sends request to `/proxy?url=...`
+2. **Cloudflare Worker** → Fetches the ICS file from the calendar provider
+3. **Worker validates** → Ensures it's a valid ICS file (contains `BEGIN:VCALENDAR`)
+4. **Returns JSON** → Worker wraps ICS content in JSON response with CORS headers
+5. **Frontend parses** → Extracts ICS data and parses calendar events
+
+### Benefits
+
+- **No Third-Party Services**: Your own Cloudflare Worker (not a public proxy)
+- **Privacy**: ICS URLs are processed by your infrastructure
+- **Reliability**: Cloudflare's edge network for fast, global access
+- **Security**: URL validation prevents SSRF attacks
+
+### Worker Endpoints
+
+- `GET /proxy?url=<ics-url>` - Fetch ICS file (primary method)
+- `POST /proxy` with `{ url: "..." }` - Alternative method
+- `GET /health` - Health check endpoint
+
 ## Technology Stack
 
 - **Frontend**: React 19 + TypeScript
+- **Backend**: Cloudflare Worker (CORS proxy)
 - **Build Tool**: Vite 7
+- **Framework**: Hono (Cloudflare Worker)
 - **UI Components**: shadcn/ui (Tailwind CSS + Radix UI)
 - **Calendar Parsing**: ical.js (Mozilla)
 - **Date Handling**: date-fns
 - **Storage**: localStorage (client-side only)
 - **PWA**: Web App Manifest
+- **Deployment**: Cloudflare Pages + Workers
 
 ## Project Structure
 

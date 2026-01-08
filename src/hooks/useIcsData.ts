@@ -7,6 +7,7 @@ import {
   saveIcsUrl,
   getCachedEvents,
   saveCachedEvents,
+  getLastFetch,
 } from '@/lib/storage';
 
 interface UseIcsDataReturn {
@@ -15,11 +16,13 @@ interface UseIcsDataReturn {
   loading: boolean;
   error: string | null;
   icsUrl: string;
+  lastFetch: number | null;
   weekView: WeekView;
   setWeekView: (view: WeekView) => void;
   setIcsUrl: (url: string) => Promise<void>;
   refresh: () => Promise<void>;
   clearData: () => void;
+  editUrl: () => void;
 }
 
 /**
@@ -31,12 +34,14 @@ export function useIcsData(): UseIcsDataReturn {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [icsUrl, setIcsUrlState] = useState<string>('');
+  const [lastFetch, setLastFetch] = useState<number | null>(null);
   const [weekView, setWeekView] = useState<WeekView>('this-week');
 
   // Initialize from localStorage on mount
   useEffect(() => {
     const storedUrl = getIcsUrl();
     const cachedEvents = getCachedEvents();
+    const storedLastFetch = getLastFetch();
 
     if (storedUrl) {
       setIcsUrlState(storedUrl);
@@ -44,6 +49,10 @@ export function useIcsData(): UseIcsDataReturn {
 
     if (cachedEvents && cachedEvents.length > 0) {
       setEvents(cachedEvents);
+    }
+
+    if (storedLastFetch) {
+      setLastFetch(storedLastFetch);
     }
   }, []);
 
@@ -58,6 +67,8 @@ export function useIcsData(): UseIcsDataReturn {
       const parsedEvents = await fetchAndParseICS(url);
       setEvents(parsedEvents);
       saveCachedEvents(parsedEvents);
+      const now = Date.now();
+      setLastFetch(now);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load calendar';
       setError(errorMessage);
@@ -98,8 +109,14 @@ export function useIcsData(): UseIcsDataReturn {
     setIcsUrlState('');
     setEvents([]);
     setError(null);
-    // Note: We don't call clearStorage() from lib/storage.ts here
-    // because the component may want to handle that separately
+    setLastFetch(null);
+  }, []);
+
+  /**
+   * Edit URL - clears current URL to show input form
+   */
+  const editUrl = useCallback(() => {
+    setIcsUrlState('');
   }, []);
 
   /**
@@ -113,10 +130,12 @@ export function useIcsData(): UseIcsDataReturn {
     loading,
     error,
     icsUrl,
+    lastFetch,
     weekView,
     setWeekView,
     setIcsUrl,
     refresh,
     clearData,
+    editUrl,
   };
 }

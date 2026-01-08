@@ -2,18 +2,61 @@ import ICAL from 'ical.js';
 import type { CalendarEvent } from '@/types';
 
 /**
- * Fetch ICS file from URL
+ * Get the proxy URL based on environment
+ */
+function getProxyUrl(): string {
+  // In production with Cloudflare Workers, use relative path
+  // The worker serves both static assets and API endpoints
+  return '/proxy';
+}
+
+/**
+ * Fetch ICS file from URL using Cloudflare Worker proxy
  */
 export async function fetchICS(url: string): Promise<string> {
   try {
-    const response = await fetch(url);
+    const proxyUrl = getProxyUrl();
+    
+    // Use query parameter for GET request
+    const proxyEndpoint = `${proxyUrl}?url=${encodeURIComponent(url)}`;
+    
+    const response = await fetch(proxyEndpoint, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
     
     if (!response.ok) {
-      throw new Error(`Failed to fetch ICS file: ${response.statusText}`);
+      throw new Error(`Proxy returned status ${response.status}`);
     }
     
-    const text = await response.text();
-    return text;
+    // Parse JSON response from proxy
+    const jsonResponse = await response.json() as {
+      success: boolean;
+      data?: string;
+      error?: string;
+      details?: string;
+      upstreamStatus?: number;
+      upstreamStatusText?: string;
+    };
+    
+    // Check if proxy request was successful
+    if (!jsonResponse.success) {
+      const errorMsg = jsonResponse.error || 'Failed to fetch ICS data';
+      const details = jsonResponse.details ? ` (${jsonResponse.details})` : '';
+      const upstream = jsonResponse.upstreamStatus 
+        ? ` [Upstream: ${jsonResponse.upstreamStatus} ${jsonResponse.upstreamStatusText}]`
+        : '';
+      throw new Error(`${errorMsg}${details}${upstream}`);
+    }
+    
+    // Validate we got data
+    if (!jsonResponse.data) {
+      throw new Error('Proxy returned success but no data');
+    }
+    
+    return jsonResponse.data;
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`Failed to fetch ICS: ${error.message}`);

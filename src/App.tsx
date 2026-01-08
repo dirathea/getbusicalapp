@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { IcsInput } from '@/components/IcsInput';
+import { UrlInfo } from '@/components/UrlInfo';
 import { WeekToggle } from '@/components/WeekToggle';
 import { EventList } from '@/components/EventList';
 import { EventDetailsDialog } from '@/components/EventDetailsDialog';
@@ -14,10 +15,12 @@ export function App() {
     loading,
     error,
     icsUrl,
+    lastFetch,
     weekView,
     setWeekView,
     setIcsUrl,
     refresh,
+    editUrl,
   } = useIcsData();
 
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
@@ -30,6 +33,10 @@ export function App() {
 
   const handleRefresh = async () => {
     await refresh();
+  };
+
+  const handleEditUrl = () => {
+    editUrl();
   };
 
   const handleEventClick = (event: CalendarEvent) => {
@@ -65,11 +72,21 @@ export function App() {
           <IcsInput onSubmit={handleIcsSubmit} loading={loading} />
         ) : (
           <div className="space-y-6">
+            <UrlInfo 
+              url={icsUrl} 
+              lastFetch={lastFetch} 
+              onEdit={handleEditUrl}
+            />
+
             <WeekToggle value={weekView} onChange={setWeekView} />
 
             {error && (
               <div className="rounded-md bg-destructive/10 p-4 text-destructive">
                 <p className="text-sm font-medium">{error}</p>
+                <p className="text-xs mt-1">
+                  Check your ICS URL or try refreshing. If the issue persists, 
+                  try changing your calendar URL.
+                </p>
               </div>
             )}
 
