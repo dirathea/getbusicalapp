@@ -80,12 +80,17 @@ export function generateGoogleCalendarLink(
     trp: 'true', // Transparency: busy
   };
 
-  // Add email if provided
+  const googleCalendarUrl = buildUrl(baseUrl, params);
+
+  // If email is provided, wrap the URL with AccountChooser for proper profile switching
   if (email) {
-    params.add = email;
+    const accountChooserUrl = new URL('https://accounts.google.com/AccountChooser');
+    accountChooserUrl.searchParams.append('Email', email);
+    accountChooserUrl.searchParams.append('continue', googleCalendarUrl);
+    return accountChooserUrl.toString();
   }
 
-  return buildUrl(baseUrl, params);
+  return googleCalendarUrl;
 }
 
 /**

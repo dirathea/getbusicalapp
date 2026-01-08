@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "dev:all": "concurrently 'npm run dev:worker' 'npm run dev'",
-    "dev:worker": "wrangler dev --port 8787"
+    "dev:worker": "wrangler dev --port 8787",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
