@@ -5,8 +5,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogContent,
   AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
@@ -124,6 +126,9 @@ export function IcsInput({ onSubmit, loading = false }: IcsInputProps) {
                     </div>
                   </AlertDialogDescription>
                 </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction>Got it</AlertDialogAction>
+                </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           </div>

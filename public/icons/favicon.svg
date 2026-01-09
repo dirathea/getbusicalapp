@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g clip-path="url(#SvgjsClipPath1015)"><rect width="1000" height="1000" fill="#3b82f6"></rect><g transform="matrix(1.3671875,0,0,1.3671875,150,150)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512"><svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="128" fill="#000000"></rect>
+  <rect x="96" y="128" width="320" height="288" rx="16" fill="white"></rect>
+  <rect x="96" y="128" width="320" height="64" rx="16" fill="#3b82f6"></rect>
+  <line x1="176" y1="224" x2="176" y2="368" stroke="#e5e7eb" stroke-width="2"></line>
+  <line x1="256" y1="224" x2="256" y2="368" stroke="#e5e7eb" stroke-width="2"></line>
+  <line x1="336" y1="224" x2="336" y2="368" stroke="#e5e7eb" stroke-width="2"></line>
+  <line x1="136" y1="264" x2="376" y2="264" stroke="#e5e7eb" stroke-width="2"></line>
+  <line x1="136" y1="304" x2="376" y2="304" stroke="#e5e7eb" stroke-width="2"></line>
+  <line x1="136" y1="344" x2="376" y2="344" stroke="#e5e7eb" stroke-width="2"></line>
+  <rect x="200" y="280" width="48" height="16" rx="4" fill="#3b82f6"></rect>
+</svg></svg></g></g><defs><clipPath id="SvgjsClipPath1015"><rect width="1000" height="1000" x="0" y="0" rx="350" ry="350"></rect></clipPath></defs></svg>

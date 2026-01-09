@@ -6,6 +6,7 @@ import { WeekToggle } from '@/components/WeekToggle';
 import { EventList } from '@/components/EventList';
 import { EventDetailsDialog } from '@/components/EventDetailsDialog';
 import { SyncDialog } from '@/components/SyncDialog';
+import { UpdatePrompt } from '@/components/UpdatePrompt';
 import { useIcsData } from '@/hooks/useIcsData';
 import type { CalendarEvent } from '@/types';
 
@@ -66,6 +67,8 @@ export function App() {
   return (
     <div className="min-h-screen bg-background">
       <Header onRefresh={handleRefresh} loading={loading} />
+      
+      <UpdatePrompt />
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         {!icsUrl ? (
