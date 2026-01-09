@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 import { IcsInput } from '@/components/IcsInput';
 import { UrlInfo } from '@/components/UrlInfo';
 import { WeekToggle } from '@/components/WeekToggle';
@@ -118,6 +119,8 @@ export function App() {
         open={showSyncDialog}
         onOpenChange={handleSyncDialogClose}
       />
+
+      <Footer />
     </div>
   );
 }
