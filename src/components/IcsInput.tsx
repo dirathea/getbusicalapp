@@ -4,15 +4,18 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { HelpCircleIcon } from 'lucide-react';
 import { isValidIcsUrl } from '@/lib/icsParser';
 
@@ -72,65 +75,67 @@ export function IcsInput({ onSubmit, loading = false }: IcsInputProps) {
               {loading ? 'Loading...' : 'Load Events'}
             </Button>
 
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
+            <Dialog>
+              <DialogTrigger asChild>
                 <Button type="button" variant="outline" size="sm">
                   <HelpCircleIcon className="mr-2 h-4 w-4" />
                   How to get ICS URL
                 </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-                <AlertDialogHeader>
-                  <AlertDialogTitle>How to Get Your ICS URL</AlertDialogTitle>
-                  <AlertDialogDescription asChild>
-                    <div className="space-y-6 text-left">
-                      <div>
-                        <h3 className="font-semibold text-foreground mb-2">📧 Google Calendar</h3>
-                        <ol className="list-decimal list-inside space-y-1 text-sm">
-                          <li>Open Google Calendar on the web</li>
-                          <li>Click Settings (gear icon) → Settings</li>
-                          <li>Select your calendar from the left sidebar</li>
-                          <li>Scroll to "Integrate calendar" section</li>
-                          <li>Copy the "Secret address in iCalendar format" URL</li>
-                        </ol>
-                      </div>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>How to Get Your ICS URL</DialogTitle>
+                </DialogHeader>
 
-                      <div>
-                        <h3 className="font-semibold text-foreground mb-2">📧 Outlook.com</h3>
-                        <ol className="list-decimal list-inside space-y-1 text-sm">
-                          <li>Open Outlook Calendar on the web</li>
-                          <li>Click Settings → View all Outlook settings</li>
-                          <li>Go to Calendar → Shared calendars</li>
-                          <li>Under "Publish a calendar", select your calendar</li>
-                          <li>Click "Publish" and copy the ICS link</li>
-                        </ol>
-                      </div>
+                <div className="rounded-md bg-muted p-4">
+                  <p className="text-sm text-muted-foreground">
+                    <strong>Note:</strong> Your calendar data stays on your device.
+                    We only fetch events when you refresh.
+                  </p>
+                </div>
 
-                      <div>
-                        <h3 className="font-semibold text-foreground mb-2">🍎 Apple Calendar (iCloud)</h3>
-                        <ol className="list-decimal list-inside space-y-1 text-sm">
-                          <li>Open iCloud.com and go to Calendar</li>
-                          <li>Click the share icon next to your calendar</li>
-                          <li>Enable "Public Calendar"</li>
-                          <li>Copy the URL</li>
-                          <li>Replace "webcal://" with "https://" in the URL</li>
-                        </ol>
-                      </div>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="google">
+                    <AccordionTrigger>📧 Google Calendar</AccordionTrigger>
+                    <AccordionContent>
+                      <ol className="list-decimal list-inside space-y-1 text-sm">
+                        <li>Open Google Calendar on the web</li>
+                        <li>Click Settings (gear icon) → Settings</li>
+                        <li>Select your calendar from the left sidebar</li>
+                        <li>Scroll to "Integrate calendar" section</li>
+                        <li>Copy the "Secret address in iCalendar format" URL</li>
+                      </ol>
+                    </AccordionContent>
+                  </AccordionItem>
 
-                      <div className="rounded-md bg-muted p-4">
-                        <p className="text-sm text-muted-foreground">
-                          <strong>Note:</strong> Your calendar data stays on your device.
-                          We only fetch events when you refresh.
-                        </p>
-                      </div>
-                    </div>
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogAction>Got it</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+                  <AccordionItem value="outlook">
+                    <AccordionTrigger>📧 Outlook.com</AccordionTrigger>
+                    <AccordionContent>
+                      <ol className="list-decimal list-inside space-y-1 text-sm">
+                        <li>Open Outlook Calendar on the web</li>
+                        <li>Click Settings → View all Outlook settings</li>
+                        <li>Go to Calendar → Shared calendars</li>
+                        <li>Under "Publish a calendar", select your calendar</li>
+                        <li>Click "Publish" and copy the ICS link</li>
+                      </ol>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="apple">
+                    <AccordionTrigger>🍎 Apple Calendar (iCloud)</AccordionTrigger>
+                    <AccordionContent>
+                      <ol className="list-decimal list-inside space-y-1 text-sm">
+                        <li>Open iCloud.com and go to Calendar</li>
+                        <li>Click the share icon next to your calendar</li>
+                        <li>Enable "Public Calendar"</li>
+                        <li>Copy the URL</li>
+                        <li>Replace "webcal://" with "https://" in the URL</li>
+                      </ol>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </DialogContent>
+            </Dialog>
           </div>
         </form>
       </CardContent>
