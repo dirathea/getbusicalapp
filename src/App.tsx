@@ -10,6 +10,7 @@ import { SyncDialog } from '@/components/SyncDialog';
 import { UpdatePrompt } from '@/components/UpdatePrompt';
 import { useIcsData } from '@/hooks/useIcsData';
 import type { CalendarEvent } from '@/types';
+import { InstructionsGuide } from './components/InstructionsGuide';
 
 export function App() {
   const {
@@ -66,14 +67,17 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header onRefresh={handleRefresh} loading={loading} />
       
       <UpdatePrompt />
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         {!icsUrl ? (
-          <IcsInput onSubmit={handleIcsSubmit} loading={loading} />
+          <div className="w-full max-w-2xl mx-auto space-y-6">
+            <IcsInput onSubmit={handleIcsSubmit} loading={loading} />
+            <InstructionsGuide />
+          </div>
         ) : (
           <div className="space-y-6">
             <UrlInfo 
