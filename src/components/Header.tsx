@@ -1,4 +1,5 @@
 import { RefreshCwIcon, DownloadIcon } from 'lucide-react';
+import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { useInstallPrompt } from '@/hooks/useInstallPrompt';
 
@@ -13,10 +14,10 @@ export function Header({ onRefresh, loading = false }: HeaderProps) {
   return (
     <header className="border-b bg-background">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <span className="text-2xl">📅</span>
           <h1 className="text-xl font-bold">SnapCal</h1>
-        </div>
+        </Link>
         
         <div className="flex items-center gap-2">
           {isInstallable && !isInstalled && (
