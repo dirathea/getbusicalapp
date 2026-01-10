@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { CalendarEvent, WeekView } from '@/types';
+import type { CalendarEvent } from '@/types';
 import { fetchAndParseICS } from '@/lib/icsParser';
 import { filterEventsByWeek } from '@/lib/dateUtils';
 import {
@@ -17,8 +17,8 @@ interface UseIcsDataReturn {
   error: string | null;
   icsUrl: string;
   lastFetch: number | null;
-  weekView: WeekView;
-  setWeekView: (view: WeekView) => void;
+  weekView: number;
+  setWeekView: (view: number) => void;
   setIcsUrl: (url: string) => Promise<void>;
   refresh: () => Promise<void>;
   clearData: () => void;
@@ -35,7 +35,7 @@ export function useIcsData(): UseIcsDataReturn {
   const [error, setError] = useState<string | null>(null);
   const [icsUrl, setIcsUrlState] = useState<string>('');
   const [lastFetch, setLastFetch] = useState<number | null>(null);
-  const [weekView, setWeekView] = useState<WeekView>('this-week');
+  const [weekView, setWeekView] = useState<number>(0);
 
   // Initialize from localStorage on mount
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { UrlInfo } from '@/components/UrlInfo';
-import { WeekToggle } from '@/components/WeekToggle';
+import { WeekNavigation } from '@/components/WeekNavigation';
 import { EventList } from '@/components/EventList';
 import { EventDetailsDialog } from '@/components/EventDetailsDialog';
 import { SyncDialog } from '@/components/SyncDialog';
@@ -62,7 +62,7 @@ export function EventsPage() {
         onEdit={handleEditUrl}
       />
 
-      <WeekToggle value={weekView} onChange={setWeekView} />
+      <WeekNavigation value={weekView} onChange={setWeekView} />
 
       {error && (
         <div className="rounded-md bg-destructive/10 p-4 text-destructive">
