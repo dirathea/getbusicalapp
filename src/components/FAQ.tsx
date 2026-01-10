@@ -45,7 +45,7 @@ const faqItems: FAQItem[] = [
     answer: (
       <div className="space-y-2">
         <p>
-          When you sync an event from your personal calendar to your work calendar, 
+          When you sync an event from a calendar to the destination calendar, 
           SnapCal protects your privacy by <strong>not revealing the original event details</strong>.
         </p>
         <p>
@@ -66,8 +66,8 @@ const faqItems: FAQItem[] = [
           <li>Attendees or participants</li>
         </ul>
         <p>
-          This way, your work calendar shows you're busy during that time, but 
-          colleagues can't see what you're actually doing. Your personal life stays private!
+          This way, your destination calendar shows you're busy during that time, but 
+          can't see what you're actually doing. Your event stays private!
         </p>
       </div>
     ),
