@@ -268,18 +268,31 @@ volumes:
 
 SnapCal Docker images support multiple architectures:
 
-- **linux/amd64** - Standard x86_64 systems
-- **linux/arm64** - ARM 64-bit (Apple Silicon, AWS Graviton, etc.)
-- **linux/arm/v7** - ARM 32-bit (Raspberry Pi 3/4)
+- **linux/amd64** - Standard x86_64 systems (Intel/AMD CPUs)
+- **linux/arm64** - ARM 64-bit (Apple Silicon M1/M2/M3, AWS Graviton, Raspberry Pi 4 with 64-bit OS)
 
 Docker automatically pulls the correct image for your platform.
 
+**Note on ARM 32-bit (armv7):** The Bun runtime used by SnapCal does not provide Alpine Linux builds for 32-bit ARM. If you need to run on 32-bit ARM devices:
+- **Recommended:** Use Raspberry Pi OS 64-bit (supported on Raspberry Pi 3 Model B+ and later)
+- **Alternative:** Deploy using Cloudflare Workers (platform-independent, see Cloudflare Workers Deployment Guide below)
+
 ### Raspberry Pi Deployment
 
-SnapCal works great on Raspberry Pi 3/4:
+SnapCal works great on Raspberry Pi 3 Model B+ and later with 64-bit OS:
+
+**Prerequisites:**
+- Raspberry Pi 3 Model B+ or Raspberry Pi 4/5
+- **64-bit OS** (Raspberry Pi OS 64-bit or Ubuntu 64-bit for ARM)
+- Docker installed
 
 ```bash
-# Pull the image (automatically selects arm/v7 or arm64)
+# Verify your system is 64-bit
+uname -m
+# Should output: aarch64 (64-bit, supported!) 
+# If it shows: armv7l (32-bit, not supported - upgrade to 64-bit OS)
+
+# Pull the image (automatically selects arm64 for 64-bit systems)
 docker pull ghcr.io/dirathea/snapcal:latest
 
 # Run with minimal resources
@@ -291,6 +304,13 @@ docker run -d \
   --restart unless-stopped \
   ghcr.io/dirathea/snapcal:latest
 ```
+
+**Upgrading to 64-bit OS on Raspberry Pi:**
+If you're currently running 32-bit OS and need to upgrade:
+1. Download Raspberry Pi OS 64-bit from https://www.raspberrypi.com/software/
+2. Use Raspberry Pi Imager to flash a new SD card
+3. Boot from the new 64-bit OS
+4. Install Docker and deploy SnapCal
 
 ---
 
@@ -397,3 +417,386 @@ docker pull ghcr.io/dirathea/snapcal:sha-abc123
 ## License
 
 SnapCal is open source software, licensed as per the repository.
+
+---
+
+# ☁️ Cloudflare Workers Deployment Guide
+
+This guide covers deploying SnapCal to Cloudflare Pages + Workers for a serverless, global deployment.
+
+## Table of Contents
+- [Prerequisites](#prerequisites)
+- [Initial Setup](#initial-setup)
+- [Security Configuration](#security-configuration)
+- [Rate Limiting Setup](#rate-limiting-setup)
+- [Deployment](#deployment)
+- [Monitoring](#monitoring)
+
+---
+
+## Prerequisites
+
+- Cloudflare account (free tier works!)
+- Node.js 18+ installed
+- npm or yarn package manager
+- GitHub repository (for automatic deployments)
+
+---
+
+## Initial Setup
+
+### 1. Clone and Install
+
+```bash
+git clone https://github.com/dirathea/snapcal.git
+cd snapcal
+npm install
+```
+
+### 2. Login to Cloudflare
+
+```bash
+npx wrangler login
+```
+
+This will open your browser to authenticate with Cloudflare.
+
+### 3. Update wrangler.jsonc
+
+Edit `wrangler.jsonc` and update the name if needed:
+
+```jsonc
+{
+  "name": "snapcal-yourname",  // Change this to avoid conflicts
+  "compatibility_date": "2025-04-03",
+  // ... rest of config
+}
+```
+
+---
+
+## Security Configuration
+
+### Environment Variables
+
+Set the `ALLOWED_ORIGIN` environment variable to restrict CORS access:
+
+#### Development (wrangler.jsonc)
+
+Already configured in `wrangler.jsonc`:
+```jsonc
+{
+  "vars": {
+    "ALLOWED_ORIGIN": "http://localhost:5174"
+  }
+}
+```
+
+#### Production (Cloudflare Dashboard)
+
+1. Go to **Workers & Pages** → Your worker → **Settings** → **Variables**
+2. Add environment variable:
+   - **Name:** `ALLOWED_ORIGIN`
+   - **Value:** `https://your-production-domain.com`
+3. Click **"Save"**
+4. Redeploy worker
+
+#### Using Wrangler CLI
+
+```bash
+wrangler secret put ALLOWED_ORIGIN
+# Enter value: https://your-production-domain.com
+```
+
+**Important:** Set this to your actual domain in production, not `*` wildcard!
+
+---
+
+## Rate Limiting Setup
+
+Protect your proxy from abuse with Cloudflare Rate Limiting:
+
+### Option 1: WAF Rate Limiting Rules (Recommended)
+
+1. Go to **Cloudflare Dashboard** → Your domain → **Security** → **WAF**
+2. Click **"Create rule"** under Rate Limiting Rules
+3. Configure:
+   - **Rule name:** Proxy Rate Limit
+   - **When incoming requests match:**
+     - Field: `URI Path`
+     - Operator: `contains`
+     - Value: `/proxy`
+   - **With the same characteristics:**
+     - Field: `IP Address`
+   - **Choose action:**
+     - **Requests:** `60` per `1 minute`
+     - **Action:** Block
+     - **Duration:** `1 hour`
+4. Click **"Deploy"**
+
+### Recommended Limits
+
+- **Personal use:** 60 requests/minute per IP
+- **Team use:** 300 requests/minute per IP
+- **Public instance:** 30 requests/minute per IP with stricter duration
+
+### Option 2: Workers Built-in Rate Limiting
+
+For more granular control, you can implement rate limiting in the Worker code using:
+- Cloudflare Workers KV
+- Durable Objects
+- Rate Limiting API
+
+See [Cloudflare Workers Rate Limiting Guide](https://developers.cloudflare.com/workers/examples/rate-limiting/).
+
+---
+
+## Deployment
+
+### Method 1: Manual Deployment (Quick)
+
+```bash
+# Build the project
+npm run build
+
+# Deploy to Cloudflare
+npx wrangler pages deploy dist/client
+```
+
+Follow the prompts to create a new project or select existing.
+
+### Method 2: Automatic Deployment via GitHub (Recommended)
+
+1. **Push to GitHub:**
+   ```bash
+   git push origin main
+   ```
+
+2. **Connect to Cloudflare Pages:**
+   - Go to **Cloudflare Dashboard** → **Pages**
+   - Click **"Create a project"**
+   - Connect your GitHub repository
+   - Select **snapcal** repository
+
+3. **Configure Build Settings:**
+   - **Framework preset:** Vite
+   - **Build command:** `npm run build`
+   - **Build output directory:** `dist/client`
+   - **Root directory:** `/`
+
+4. **Add Environment Variables:**
+   - Click **"Environment variables"**
+   - Add `ALLOWED_ORIGIN` with your production domain
+
+5. **Deploy:**
+   - Click **"Save and Deploy"**
+   - Wait for build to complete (~2 minutes)
+
+### Method 3: Using Wrangler
+
+```bash
+# Deploy with wrangler
+npx wrangler pages deploy dist/client --project-name snapcal
+```
+
+---
+
+## Security Headers
+
+The proxy includes security headers by default:
+- `X-Content-Type-Options: nosniff`
+- `X-Frame-Options: DENY`
+- `X-XSS-Protection: 1; mode=block`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Content-Security-Policy: default-src 'none'`
+
+No additional configuration needed.
+
+---
+
+## Monitoring
+
+### No Logs Policy
+
+The proxy **does not log** calendar URLs or content for privacy.
+
+### What You Can Monitor (via Cloudflare Dashboard)
+
+Access: **Workers & Pages** → Your worker → **Metrics**
+
+Available metrics:
+- Request count (total proxy requests)
+- Error rates (5xx responses)
+- Response times (p50, p95, p99)
+- Bandwidth usage
+
+**Metrics do NOT include:**
+- Calendar URLs
+- ICS file content  
+- Personal data
+
+### Setting Up Alerts
+
+1. Go to **Notifications** in Cloudflare Dashboard
+2. Create alert for:
+   - High error rate (>5%)
+   - Unusual request spike
+   - Worker exceptions
+
+---
+
+## Privacy Best Practices
+
+### For Self-Hosters
+
+1. ✅ **Set strict ALLOWED_ORIGIN** - don't use wildcard `*` in production
+2. ✅ **Enable rate limiting** - prevent abuse
+3. ✅ **Regular updates** - keep worker code up to date
+4. ✅ **Monitor metrics** - watch for unusual patterns
+5. ✅ **Document for users** - if hosting for others, provide privacy policy
+
+### For Users
+
+1. ✅ **Use self-hosted instance** - if privacy is critical
+2. ✅ **Regenerate ICS URLs periodically** - from your calendar provider
+3. ✅ **Use read-only calendar URLs** - never share write-access URLs
+4. ✅ **Clear browser data** - if switching devices or concerned about local storage
+
+---
+
+## Troubleshooting
+
+### CORS Errors
+
+**Error:** `CORS policy: No 'Access-Control-Allow-Origin' header`
+
+**Solution:**
+1. Verify `ALLOWED_ORIGIN` environment variable is set correctly
+2. Ensure value matches your app's domain exactly (including `https://`)
+3. Redeploy worker after changing environment variables
+
+```bash
+# Check current environment variables
+npx wrangler pages deployment list
+
+# Update via dashboard or:
+wrangler secret put ALLOWED_ORIGIN
+```
+
+### Rate Limit Exceeded
+
+**Error:** `429 Too Many Requests`
+
+**Cause:** Too many requests from same IP
+
+**Solution:**
+1. Check Cloudflare WAF Rate Limiting rules
+2. Adjust limits if legitimate use case
+3. Wait for rate limit window to reset (typically 1 hour)
+4. Consider increasing limits for your IP
+
+### File Size Errors
+
+**Error:** `413 Payload Too Large`
+
+**Cause:** Calendar file exceeds 5MB limit
+
+**Solution:**
+1. Export smaller date range from calendar provider
+2. Remove old events from calendar
+3. Split calendar into multiple ICS feeds
+
+### Deployment Fails
+
+**Error:** Build fails or deployment errors
+
+**Solution:**
+```bash
+# Clear build cache
+rm -rf dist/ node_modules/.vite
+
+# Reinstall dependencies
+npm clean-install
+
+# Rebuild
+npm run build
+
+# Redeploy
+npx wrangler pages deploy dist/client
+```
+
+### Worker Not Updating
+
+**Issue:** Changes not reflected after deployment
+
+**Solution:**
+1. Clear Cloudflare cache: **Dashboard** → **Caching** → **Purge Everything**
+2. Hard refresh browser (Ctrl+Shift+R or Cmd+Shift+R)
+3. Check deployment status in **Pages** dashboard
+4. Wait 1-2 minutes for global propagation
+
+---
+
+## Custom Domain Setup
+
+### Add Custom Domain to Pages
+
+1. Go to **Pages** → Your project → **Custom domains**
+2. Click **"Set up a custom domain"**
+3. Enter your domain: `snapcal.yourdomain.com`
+4. Follow DNS instructions (usually CNAME record)
+5. Wait for SSL certificate (automatic, ~10 minutes)
+
+### Update ALLOWED_ORIGIN
+
+After adding custom domain, update environment variable:
+
+```bash
+wrangler secret put ALLOWED_ORIGIN
+# Enter: https://snapcal.yourdomain.com
+```
+
+Or via dashboard:
+**Workers & Pages** → Settings → Variables → Edit `ALLOWED_ORIGIN`
+
+---
+
+## Cost Estimate
+
+Cloudflare Workers Free Tier:
+- ✅ **100,000 requests/day** - Free
+- ✅ **10ms CPU time/request** - Free
+- ✅ **Unlimited bandwidth** - Free (for workers)
+- ✅ **SSL certificate** - Free
+
+**Estimated usage:**
+- Personal use (~10 users): **Free**
+- Small team (~50 users): **Free**
+- Medium org (~500 users): **Free** (within limits)
+
+**Paid tier ($5/month) needed only if:**
+- >100k requests/day
+- Need Workers Analytics
+- Need longer CPU time
+
+---
+
+## Support
+
+- **Issues:** https://github.com/dirathea/snapcal/issues
+- **Discussions:** https://github.com/dirathea/snapcal/discussions  
+- **Privacy Policy:** [PRIVACY.md](PRIVACY.md)
+- **Cloudflare Docs:** https://developers.cloudflare.com/workers/
+
+---
+
+## Next Steps
+
+After deployment:
+1. ✅ Set `ALLOWED_ORIGIN` to your production domain
+2. ✅ Configure rate limiting rules
+3. ✅ Set up monitoring alerts
+4. ✅ Test calendar fetching
+5. ✅ Review [Privacy Policy](PRIVACY.md)
+6. ✅ Share with your team!
+

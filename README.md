@@ -74,20 +74,63 @@ SnapCal uses a Cloudflare Worker as a CORS proxy to fetch ICS calendar files. Th
 2. **Cloudflare Worker** → Fetches the ICS file from the calendar provider
 3. **Worker validates** → Ensures it's a valid ICS file (contains `BEGIN:VCALENDAR`)
 4. **Returns JSON** → Worker wraps ICS content in JSON response with CORS headers
-5. **Frontend parses** → Extracts ICS data and parses calendar events
+5. **Frontend parses** → Extracts ICS data and parses calendar events locally
+
+### Privacy & Data Handling
+
+**⚠️ IMPORTANT: No data is stored, logged, or retained on the proxy server.**
+
+- **Stateless Operation:** The proxy fetches your calendar and immediately returns it to your browser. Nothing is saved.
+- **No Logging:** The proxy does not log calendar URLs, ICS content, IP addresses, or any request data.
+- **Pass-Through Only:** Think of it as a transparent tunnel - data flows through but nothing sticks.
+- **Client-Side Processing:** All calendar parsing, caching, and storage happens in your browser's localStorage.
+
+See our [Privacy Policy](PRIVACY.md) for complete details.
+
+### Security Measures
+
+- **URL Validation:** Prevents SSRF (Server-Side Request Forgery) attacks
+- **Protocol Restriction:** Only http/https allowed (blocks file://, ftp://, etc.)
+- **Content Validation:** Verifies response contains valid ICS data
+- **Size Limits:** Maximum 5MB calendar file size
+- **Security Headers:** X-Frame-Options, CSP, X-Content-Type-Options, etc.
+- **Origin Restriction:** CORS limited to configured domains (not wildcard `*`)
+- **Rate Limiting:** Configured via Cloudflare dashboard to prevent abuse
 
 ### Benefits
 
-- **No Third-Party Services**: Your own Cloudflare Worker (not a public proxy)
-- **Privacy**: ICS URLs are processed by your infrastructure
-- **Reliability**: Cloudflare's edge network for fast, global access
-- **Security**: URL validation prevents SSRF attacks
+- **No Third-Party Services:** Your own Cloudflare Worker (not a public proxy)
+- **Privacy:** ICS URLs processed by infrastructure you control
+- **Reliability:** Cloudflare's edge network for fast, global access
+- **Transparency:** Open source - inspect the code yourself
+
+### Self-Hosting
+
+Want complete control? Deploy your own proxy:
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/dirathea/snapcal
+cd snapcal
+
+# 2. Configure your domain
+# Edit wrangler.jsonc and set ALLOWED_ORIGIN
+
+# 3. Deploy to Cloudflare
+npm run deploy
+```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 
 ### Worker Endpoints
 
 - `GET /proxy?url=<ics-url>` - Fetch ICS file (primary method)
 - `POST /proxy` with `{ url: "..." }` - Alternative method
 - `GET /health` - Health check endpoint
+
+### FAQ
+
+Have questions about the proxy? Check our [FAQ page](/faq) or [Privacy Policy](PRIVACY.md).
 
 ## Technology Stack
 

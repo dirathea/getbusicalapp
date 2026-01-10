@@ -1,4 +1,4 @@
-import { LinkIcon, CalendarIcon, MailIcon, ShieldIcon } from 'lucide-react';
+import { LinkIcon, CalendarIcon, MailIcon } from 'lucide-react';
 
 export function InstructionsGuide() {
   return (
@@ -49,14 +49,6 @@ export function InstructionsGuide() {
             </p>
           </div>
         </div>
-      </div>
-
-      {/* Privacy Note */}
-      <div className="flex items-center gap-2 pt-2 border-t border-border/50">
-        <ShieldIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-        <p className="text-xs text-muted-foreground">
-          <strong>Privacy:</strong> Events sync as "Synced Event" - no personal details shared
-        </p>
       </div>
     </div>
   );

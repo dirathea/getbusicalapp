@@ -1,18 +1,23 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-interface SetupConfig {
+interface Env {
+  ALLOWED_ORIGIN?: string;
+}
+
+interface SetupConfig extends Env {
   corsOrigin?: string;
 }
 
-const setup = <T extends Hono = Hono>(app: T, config?: SetupConfig): T => {
-  const corsOrigin = config?.corsOrigin || "*";
+const setup = <T extends Hono = Hono>(app: T, env?: Env): T => {
+  // Get allowed origin from environment variable or fallback to wildcard for dev
+  const allowedOrigin = env?.ALLOWED_ORIGIN || "*";
 
   // Enable CORS for all routes
   app.use(
     "*",
     cors({
-      origin: corsOrigin, // Allow all origins. Restrict as needed for production
+      origin: allowedOrigin,
       allowMethods: ["GET", "POST", "OPTIONS"],
       allowHeaders: ["Content-Type", "Authorization", "Accept", "User-Agent"],
       exposeHeaders: ["Content-Length", "Content-Type"],
@@ -20,6 +25,26 @@ const setup = <T extends Hono = Hono>(app: T, config?: SetupConfig): T => {
       credentials: false,
     })
   );
+
+  // Security headers middleware
+  app.use("*", async (c, next) => {
+    await next();
+    
+    // Prevent MIME type sniffing
+    c.header('X-Content-Type-Options', 'nosniff');
+    
+    // Prevent clickjacking
+    c.header('X-Frame-Options', 'DENY');
+    
+    // Enable XSS protection
+    c.header('X-XSS-Protection', '1; mode=block');
+    
+    // Referrer policy
+    c.header('Referrer-Policy', 'strict-origin-when-cross-origin');
+    
+    // Content Security Policy
+    c.header('Content-Security-Policy', "default-src 'none'");
+  });
 
   // Health check endpoint
   app.get("/health", (c) => {
@@ -74,6 +99,20 @@ const setup = <T extends Hono = Hono>(app: T, config?: SetupConfig): T => {
         },
       });
 
+      // Check file size limit (5MB max)
+      const MAX_ICS_SIZE = 5 * 1024 * 1024; // 5MB
+      const contentLength = response.headers.get('content-length');
+      
+      if (contentLength && parseInt(contentLength) > MAX_ICS_SIZE) {
+        return c.json(
+          {
+            success: false,
+            error: "Calendar file too large (max 5MB)",
+          },
+          413 // Payload Too Large
+        );
+      }
+
       if (!response.ok) {
         return c.json(
           {
@@ -88,6 +127,17 @@ const setup = <T extends Hono = Hono>(app: T, config?: SetupConfig): T => {
 
       // Get the ICS data as plain text
       const icsData = await response.text();
+
+      // Double-check actual size (in case Content-Length header was missing)
+      if (icsData.length > MAX_ICS_SIZE) {
+        return c.json(
+          {
+            success: false,
+            error: "Calendar file too large (max 5MB)",
+          },
+          413
+        );
+      }
 
       // Validate that we got ICS-like content
       if (!icsData.includes("BEGIN:VCALENDAR")) {
@@ -109,7 +159,7 @@ const setup = <T extends Hono = Hono>(app: T, config?: SetupConfig): T => {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
-      console.error("Proxy error:", errorMessage);
+      // No logging - privacy first
       return c.json(
         {
           success: false,
@@ -169,6 +219,20 @@ const setup = <T extends Hono = Hono>(app: T, config?: SetupConfig): T => {
         },
       });
 
+      // Check file size limit (5MB max)
+      const MAX_ICS_SIZE = 5 * 1024 * 1024; // 5MB
+      const contentLength = response.headers.get('content-length');
+      
+      if (contentLength && parseInt(contentLength) > MAX_ICS_SIZE) {
+        return c.json(
+          {
+            success: false,
+            error: "Calendar file too large (max 5MB)",
+          },
+          413 // Payload Too Large
+        );
+      }
+
       if (!response.ok) {
         return c.json(
           {
@@ -182,6 +246,17 @@ const setup = <T extends Hono = Hono>(app: T, config?: SetupConfig): T => {
       }
 
       const icsData = await response.text();
+
+      // Double-check actual size
+      if (icsData.length > MAX_ICS_SIZE) {
+        return c.json(
+          {
+            success: false,
+            error: "Calendar file too large (max 5MB)",
+          },
+          413
+        );
+      }
 
       if (!icsData.includes("BEGIN:VCALENDAR")) {
         return c.json(
@@ -200,7 +275,7 @@ const setup = <T extends Hono = Hono>(app: T, config?: SetupConfig): T => {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
-      console.error("Proxy error:", errorMessage);
+      // No logging - privacy first
       return c.json(
         {
           success: false,
@@ -226,7 +301,7 @@ const setup = <T extends Hono = Hono>(app: T, config?: SetupConfig): T => {
 
   // Error handler
   app.onError((err, c) => {
-    console.error("Worker error:", err);
+    // No logging - privacy first
     return c.json(
       {
         success: false,

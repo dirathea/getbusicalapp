@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router';
 import { IcsInput } from '@/components/IcsInput';
 import { InstructionsGuide } from '@/components/InstructionsGuide';
+import { PrivacyBanner } from '@/components/PrivacyBanner';
 import { useIcsData } from '@/hooks/useIcsData';
 
 export function SetupPage() {
@@ -16,6 +17,7 @@ export function SetupPage() {
     <div className="w-full max-w-2xl mx-auto space-y-6">
       <IcsInput onSubmit={handleSubmit} loading={loading} />
       <InstructionsGuide />
+      <PrivacyBanner />
     </div>
   );
 }

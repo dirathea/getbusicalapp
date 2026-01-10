@@ -2,10 +2,12 @@ import { Hono } from 'hono';
 import { setup } from './app';
 
 interface Env {
-  Bindings: Record<string, string>;
-  Variables: Record<string, unknown>;
+  ALLOWED_ORIGIN?: string;
 }
 
-const app = new Hono<{ Bindings: Env['Bindings'] }>();
-
-export default setup(app);
+export default {
+  fetch: (request: Request, env: Env) => {
+    const app = new Hono();
+    return setup(app, env).fetch(request);
+  },
+};
