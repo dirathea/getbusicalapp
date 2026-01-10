@@ -40,6 +40,39 @@ const faqItems: FAQItem[] = [
     ),
   },
   {
+    id: 'event-sync-privacy',
+    question: 'How does event syncing protect my privacy?',
+    answer: (
+      <div className="space-y-2">
+        <p>
+          When you sync an event from your personal calendar to your work calendar, 
+          SnapCal protects your privacy by <strong>not revealing the original event details</strong>.
+        </p>
+        <p>
+          <strong>What gets synced:</strong>
+        </p>
+        <ul className="list-disc list-inside space-y-1 ml-4">
+          <li>Event title: "Synced Event" (generic title)</li>
+          <li>Time slot: Same start and end time as your personal event</li>
+          <li>Status: Marked as "Busy" to block the time</li>
+        </ul>
+        <p>
+          <strong>What does NOT get synced:</strong>
+        </p>
+        <ul className="list-disc list-inside space-y-1 ml-4">
+          <li>Original event title (e.g., "Doctor's appointment")</li>
+          <li>Description or notes</li>
+          <li>Location details</li>
+          <li>Attendees or participants</li>
+        </ul>
+        <p>
+          This way, your work calendar shows you're busy during that time, but 
+          colleagues can't see what you're actually doing. Your personal life stays private!
+        </p>
+      </div>
+    ),
+  },
+  {
     id: 'what-data-proxy-sees',
     question: 'What data does the proxy see?',
     answer: (
