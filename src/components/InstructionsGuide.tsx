@@ -14,7 +14,6 @@ export function InstructionsGuide() {
         {/* Step 1: Add URL */}
         <div className="flex flex-col items-center text-center space-y-2">
           <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-muted-foreground">1</span>
             <LinkIcon className="h-5 w-5 text-primary" />
           </div>
           <div className="space-y-1">
@@ -28,7 +27,6 @@ export function InstructionsGuide() {
         {/* Step 2: Select Events */}
         <div className="flex flex-col items-center text-center space-y-2">
           <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-muted-foreground">2</span>
             <CalendarIcon className="h-5 w-5 text-primary" />
           </div>
           <div className="space-y-1">
@@ -42,7 +40,6 @@ export function InstructionsGuide() {
         {/* Step 3: Sync */}
         <div className="flex flex-col items-center text-center space-y-2">
           <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-muted-foreground">3</span>
             <MailIcon className="h-5 w-5 text-primary" />
           </div>
           <div className="space-y-1">
