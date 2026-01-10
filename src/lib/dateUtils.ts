@@ -8,54 +8,47 @@ import {
   isTomorrow,
   differenceInMinutes,
 } from 'date-fns';
-import type { WeekView, CalendarEvent } from '@/types';
+import type { CalendarEvent } from '@/types';
 
 /**
- * Get the start and end dates for a given week view
+ * Get the start and end dates for a given week offset
  * Week starts on Sunday
+ * @param weekOffset - 0 = current week, 1 = next week, 2+ = future weeks
  */
-export function getWeekRange(week: WeekView): { start: Date; end: Date } {
+export function getWeekRange(weekOffset: number): { start: Date; end: Date } {
   const now = new Date();
+  const targetWeek = addWeeks(now, weekOffset);
   
-  if (week === 'this-week') {
-    return {
-      start: startOfWeek(now, { weekStartsOn: 0 }), // Sunday
-      end: endOfWeek(now, { weekStartsOn: 0 }),     // Saturday
-    };
-  } else {
-    // next-week
-    const nextWeek = addWeeks(now, 1);
-    return {
-      start: startOfWeek(nextWeek, { weekStartsOn: 0 }),
-      end: endOfWeek(nextWeek, { weekStartsOn: 0 }),
-    };
+  return {
+    start: startOfWeek(targetWeek, { weekStartsOn: 0 }), // Sunday
+    end: endOfWeek(targetWeek, { weekStartsOn: 0 }),     // Saturday
+  };
+}
+
+/**
+ * Format week range for display
+ * Returns "Jan 12 - Jan 18" or "Jan 29 - Feb 4" (abbreviated month)
+ */
+export function getWeekRangeLabel(weekOffset: number): string {
+  const { start, end } = getWeekRange(weekOffset);
+  
+  // If same month, show "Jan 12 - 18"
+  if (start.getMonth() === end.getMonth()) {
+    return `${format(start, 'MMM d')} - ${format(end, 'd')}`;
   }
+  
+  // Different months: "Jan 29 - Feb 4"
+  return `${format(start, 'MMM d')} - ${format(end, 'MMM d')}`;
 }
 
 /**
- * Check if a date is within this week
- */
-export function isThisWeek(date: Date): boolean {
-  const { start, end } = getWeekRange('this-week');
-  return isWithinInterval(date, { start, end });
-}
-
-/**
- * Check if a date is within next week
- */
-export function isNextWeek(date: Date): boolean {
-  const { start, end } = getWeekRange('next-week');
-  return isWithinInterval(date, { start, end });
-}
-
-/**
- * Filter events by week view
+ * Filter events by week offset
  */
 export function filterEventsByWeek(
   events: CalendarEvent[],
-  week: WeekView
+  weekOffset: number
 ): CalendarEvent[] {
-  const { start, end } = getWeekRange(week);
+  const { start, end } = getWeekRange(weekOffset);
   
   return events.filter((event) => {
     // Check if event starts within the week range

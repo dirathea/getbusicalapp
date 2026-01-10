@@ -25,8 +25,6 @@ export interface StorageData {
 
 export type CalendarPlatform = 'google' | 'outlook' | 'system';
 
-export type WeekView = 'this-week' | 'next-week';
-
 export interface IcsInstructions {
   platform: 'google' | 'outlook' | 'apple' | 'other';
   steps: string[];
