@@ -60,7 +60,7 @@ export function WeekNavigation({ value, onChange }: WeekNavigationProps) {
       
       {/* Mobile layout */}
       <div className="md:hidden space-y-2">
-        <div className="flex gap-1 rounded-lg border bg-muted p-1">
+        <div className="flex gap-1">
           <Button
             variant="ghost"
             size="sm"
