@@ -6,14 +6,14 @@ const app = new Hono();
 
 // Get configuration from environment variables
 const port = parseInt(process.env.PORT || "3000", 10);
-const corsOrigin = process.env.CORS_ORIGIN || "*";
+const allowedOrigin = process.env.ALLOWED_ORIGIN || "*";
 
 console.log("🚀 Starting SnapCal server...");
 console.log(`📡 Port: ${port}`);
-console.log(`🔒 CORS Origin: ${corsOrigin}`);
+console.log(`🔒 CORS Origin: ${allowedOrigin}`);
 
 // Setup API routes with CORS configuration
-setup(app, { corsOrigin });
+setup(app, { ALLOWED_ORIGIN: allowedOrigin });
 
 // Serve static files from dist directory
 // This will serve any file that exists in dist/

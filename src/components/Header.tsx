@@ -1,4 +1,4 @@
-import { RefreshCwIcon, DownloadIcon } from 'lucide-react';
+import { RefreshCwIcon, DownloadIcon, HelpCircle } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { useInstallPrompt } from '@/hooks/useInstallPrompt';
@@ -20,6 +20,13 @@ export function Header({ onRefresh, loading = false }: HeaderProps) {
         </Link>
         
         <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" asChild className="gap-1.5">
+            <Link to="/faq">
+              <HelpCircle className="h-4 w-4" />
+              <span className="hidden sm:inline">FAQ</span>
+            </Link>
+          </Button>
+          
           {isInstallable && !isInstalled && (
             <Button
               variant="default"

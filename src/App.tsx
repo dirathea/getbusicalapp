@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router/dom';
 import { Root } from '@/routes/Root';
 import { EventsPage } from '@/routes/EventsPage';
 import { SetupPage } from '@/routes/SetupPage';
+import { FAQPage } from '@/routes/FAQPage';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: 'setup',
         element: <SetupPage />,
+      },
+      {
+        path: 'faq',
+        element: <FAQPage />,
       },
     ],
   },
