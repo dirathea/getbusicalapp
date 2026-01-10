@@ -15,9 +15,9 @@ export function SetupPage() {
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">
-      <PrivacyBanner />
       <IcsInput onSubmit={handleSubmit} loading={loading} />
       <InstructionsGuide />
+      <PrivacyBanner />
     </div>
   );
 }
