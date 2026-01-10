@@ -268,18 +268,31 @@ volumes:
 
 SnapCal Docker images support multiple architectures:
 
-- **linux/amd64** - Standard x86_64 systems
-- **linux/arm64** - ARM 64-bit (Apple Silicon, AWS Graviton, etc.)
-- **linux/arm/v7** - ARM 32-bit (Raspberry Pi 3/4)
+- **linux/amd64** - Standard x86_64 systems (Intel/AMD CPUs)
+- **linux/arm64** - ARM 64-bit (Apple Silicon M1/M2/M3, AWS Graviton, Raspberry Pi 4 with 64-bit OS)
 
 Docker automatically pulls the correct image for your platform.
 
+**Note on ARM 32-bit (armv7):** The Bun runtime used by SnapCal does not provide Alpine Linux builds for 32-bit ARM. If you need to run on 32-bit ARM devices:
+- **Recommended:** Use Raspberry Pi OS 64-bit (supported on Raspberry Pi 3 Model B+ and later)
+- **Alternative:** Deploy using Cloudflare Workers (platform-independent, see Cloudflare Workers Deployment Guide below)
+
 ### Raspberry Pi Deployment
 
-SnapCal works great on Raspberry Pi 3/4:
+SnapCal works great on Raspberry Pi 3 Model B+ and later with 64-bit OS:
+
+**Prerequisites:**
+- Raspberry Pi 3 Model B+ or Raspberry Pi 4/5
+- **64-bit OS** (Raspberry Pi OS 64-bit or Ubuntu 64-bit for ARM)
+- Docker installed
 
 ```bash
-# Pull the image (automatically selects arm/v7 or arm64)
+# Verify your system is 64-bit
+uname -m
+# Should output: aarch64 (64-bit, supported!) 
+# If it shows: armv7l (32-bit, not supported - upgrade to 64-bit OS)
+
+# Pull the image (automatically selects arm64 for 64-bit systems)
 docker pull ghcr.io/dirathea/snapcal:latest
 
 # Run with minimal resources
@@ -291,6 +304,13 @@ docker run -d \
   --restart unless-stopped \
   ghcr.io/dirathea/snapcal:latest
 ```
+
+**Upgrading to 64-bit OS on Raspberry Pi:**
+If you're currently running 32-bit OS and need to upgrade:
+1. Download Raspberry Pi OS 64-bit from https://www.raspberrypi.com/software/
+2. Use Raspberry Pi Imager to flash a new SD card
+3. Boot from the new 64-bit OS
+4. Install Docker and deploy SnapCal
 
 ---
 

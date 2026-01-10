@@ -16,6 +16,9 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production runtime with Bun
+# Platform support: linux/amd64, linux/arm64
+# Note: ARM 32-bit (armv7) is not supported by oven/bun:1-alpine
+# For 32-bit ARM devices, use 64-bit OS or deploy via Cloudflare Workers
 FROM oven/bun:1-alpine AS runtime
 
 WORKDIR /app
