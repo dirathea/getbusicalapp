@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  snapcal:
+    image: ghcr.io/dirathea/snapcal:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: snapcal
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - CORS_ORIGIN=*
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "bun", "-e", "try { const r = await fetch('http://localhost:3000/health'); process.exit(r.ok ? 0 : 1); } catch { process.exit(1); }"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+networks:
+  default:
+    name: snapcal-network

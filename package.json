@@ -10,7 +10,14 @@
     "preview": "vite preview",
     "dev:all": "concurrently 'npm run dev:worker' 'npm run dev'",
     "dev:worker": "wrangler dev --port 8787",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "dev:bun": "bun run worker/bun.ts",
+    "docker:build": "docker build -t snapcal:local .",
+    "docker:run": "docker run -p 3000:3000 -e CORS_ORIGIN=* snapcal:local",
+    "docker:dev": "docker-compose up --build",
+    "docker:prod": "docker-compose up -d",
+    "docker:stop": "docker-compose down",
+    "docker:logs": "docker-compose logs -f snapcal"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
