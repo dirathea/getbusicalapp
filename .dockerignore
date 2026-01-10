@@ -47,8 +47,6 @@ coverage/
 .eslintrc*
 .prettierrc*
 eslint.config.js
-tsconfig*.json
-vite.config.ts
 wrangler.jsonc
 components.json
 
