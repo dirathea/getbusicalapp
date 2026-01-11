@@ -57,7 +57,7 @@ export function AboutPage() {
             .
           </p>
           <p className="text-sm text-muted-foreground mt-4">
-            — Aldira
+            — dirathea
           </p>
         </CardContent>
       </Card>
