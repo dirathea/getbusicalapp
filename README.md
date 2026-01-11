@@ -2,6 +2,12 @@
 
 A privacy-first Progressive Web App (PWA) that helps you sync personal calendar events to your work calendar — with privacy.
 
+<div align="center">
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-☕-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=000000)](https://www.buymeacoffee.com/dirathea?utm_source=github&utm_medium=readme)
+
+</div>
+
 ## Features
 
 - **Privacy-First**: Events sync as "Synced Event" marked as busy to protect your privacy
@@ -266,6 +272,22 @@ If you encounter issues:
 2. Verify ICS URL is valid and accessible
 3. Ensure you're using a modern browser
 4. Try clearing localStorage and refreshing
+
+---
+
+## ☕ Support This Project
+
+If BusiCal helps you manage your busy days, consider buying me a coffee!
+
+<div align="center">
+
+<a href="https://www.buymeacoffee.com/dirathea?utm_source=github&utm_medium=readme" target="_blank">
+  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="200">
+</a>
+
+</div>
+
+---
 
 ## Acknowledgments
 
