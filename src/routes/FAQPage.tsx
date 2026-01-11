@@ -1,7 +1,5 @@
 import { FAQ } from '@/components/FAQ';
 import { ShieldCheck, Lock, Code, HelpCircle } from 'lucide-react';
-import { Link } from 'react-router';
-import { Button } from '@/components/ui/button';
 
 export function FAQPage() {
   return (
@@ -102,13 +100,6 @@ export function FAQPage() {
             </p>
           </a>
         </div>
-      </div>
-
-      {/* Back Button */}
-      <div className="flex justify-center pt-4">
-        <Button variant="outline" asChild>
-          <Link to="/setup">← Back to Setup</Link>
-        </Button>
       </div>
     </div>
   );

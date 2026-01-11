@@ -1,6 +1,4 @@
-import { ArrowLeft, Github, ExternalLink, Shield, Lock, EyeOff } from 'lucide-react';
-import { Link } from 'react-router';
-import { Button } from '@/components/ui/button';
+import { Github, ExternalLink, Shield, Lock, EyeOff } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -227,16 +225,6 @@ export function AboutPage() {
           </a>
         </div>
       </section>
-
-      {/* Back Button */}
-      <div className="flex justify-center pt-4">
-        <Button variant="outline" asChild>
-          <Link to="/setup">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Setup
-          </Link>
-        </Button>
-      </div>
     </div>
   );
 }
