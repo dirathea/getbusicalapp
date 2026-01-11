@@ -29,6 +29,15 @@ export function Footer() {
             >
               Why I built this?
             </Link>
+            <span className="mx-2">•</span>
+            <a
+              href="https://www.buymeacoffee.com/dirathea?utm_source=busical&utm_medium=footer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground transition-colors"
+            >
+              Buy me a coffee ☕
+            </a>
           </p>
         </div>
       </div>

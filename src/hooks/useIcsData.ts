@@ -8,6 +8,8 @@ import {
   getCachedEvents,
   saveCachedEvents,
   getLastFetch,
+  getCalendarLastUpdated,
+  saveCalendarLastUpdated,
 } from '@/lib/storage';
 
 interface UseIcsDataReturn {
@@ -17,6 +19,7 @@ interface UseIcsDataReturn {
   error: string | null;
   icsUrl: string;
   lastFetch: number | null;
+  calendarLastUpdated: number | null;
   weekView: number;
   setWeekView: (view: number) => void;
   setIcsUrl: (url: string) => Promise<void>;
@@ -35,6 +38,7 @@ export function useIcsData(): UseIcsDataReturn {
   const [error, setError] = useState<string | null>(null);
   const [icsUrl, setIcsUrlState] = useState<string>('');
   const [lastFetch, setLastFetch] = useState<number | null>(null);
+  const [calendarLastUpdated, setCalendarLastUpdated] = useState<number | null>(null);
   const [weekView, setWeekView] = useState<number>(0);
 
   // Initialize from localStorage on mount
@@ -42,6 +46,7 @@ export function useIcsData(): UseIcsDataReturn {
     const storedUrl = getIcsUrl();
     const cachedEvents = getCachedEvents();
     const storedLastFetch = getLastFetch();
+    const storedCalendarLastUpdated = getCalendarLastUpdated();
 
     if (storedUrl) {
       setIcsUrlState(storedUrl);
@@ -54,6 +59,10 @@ export function useIcsData(): UseIcsDataReturn {
     if (storedLastFetch) {
       setLastFetch(storedLastFetch);
     }
+
+    if (storedCalendarLastUpdated) {
+      setCalendarLastUpdated(storedCalendarLastUpdated);
+    }
   }, []);
 
   /**
@@ -64,9 +73,11 @@ export function useIcsData(): UseIcsDataReturn {
     setError(null);
 
     try {
-      const parsedEvents = await fetchAndParseICS(url);
-      setEvents(parsedEvents);
-      saveCachedEvents(parsedEvents);
+      const result = await fetchAndParseICS(url);
+      setEvents(result.events);
+      setCalendarLastUpdated(result.calendarLastUpdated);
+      saveCachedEvents(result.events);
+      saveCalendarLastUpdated(result.calendarLastUpdated);
       const now = Date.now();
       setLastFetch(now);
     } catch (err) {
@@ -110,6 +121,7 @@ export function useIcsData(): UseIcsDataReturn {
     setEvents([]);
     setError(null);
     setLastFetch(null);
+    setCalendarLastUpdated(null);
   }, []);
 
   /**
@@ -131,6 +143,7 @@ export function useIcsData(): UseIcsDataReturn {
     error,
     icsUrl,
     lastFetch,
+    calendarLastUpdated,
     weekView,
     setWeekView,
     setIcsUrl,

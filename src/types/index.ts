@@ -21,6 +21,7 @@ export interface StorageData {
   icsUrl: string;
   lastFetch: number;
   cachedEvents: CalendarEvent[];
+  calendarLastUpdated: number | null;
 }
 
 export type CalendarPlatform = 'google' | 'outlook' | 'system';

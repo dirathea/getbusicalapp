@@ -1,15 +1,16 @@
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { LinkIcon, EditIcon, ClockIcon } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { LinkIcon, EditIcon, ClockIcon, AlertTriangleIcon } from 'lucide-react';
+import { formatDistanceToNow, format } from 'date-fns';
 
 interface UrlInfoProps {
   url: string;
   lastFetch: number | null;
+  calendarLastUpdated: number | null;
   onEdit: () => void;
 }
 
-export function UrlInfo({ url, lastFetch, onEdit }: UrlInfoProps) {
+export function UrlInfo({ url, lastFetch, calendarLastUpdated, onEdit }: UrlInfoProps) {
   // Truncate URL for display
   const truncateUrl = (fullUrl: string, maxLength: number = 50) => {
     try {
@@ -35,6 +36,28 @@ export function UrlInfo({ url, lastFetch, onEdit }: UrlInfoProps) {
   const lastSyncText = lastFetch 
     ? formatDistanceToNow(lastFetch, { addSuffix: true })
     : 'Never';
+    
+  const lastSyncAbsolute = lastFetch
+    ? format(lastFetch, 'PPpp')
+    : 'Never synced';
+
+  const calendarUpdatedText = calendarLastUpdated
+    ? formatDistanceToNow(calendarLastUpdated, { addSuffix: true })
+    : null;
+
+  const calendarUpdatedAbsolute = calendarLastUpdated
+    ? format(calendarLastUpdated, 'PPpp')
+    : null;
+
+  // Check if calendar hasn't been updated in 24+ hours
+  const isCalendarStale = calendarLastUpdated 
+    ? Date.now() - calendarLastUpdated > 24 * 60 * 60 * 1000
+    : false;
+
+  const staleWarning = "Calendar hasn't been updated in 24+ hours. Changes may take time to appear.";
+  const tooltipText = calendarUpdatedAbsolute
+    ? `Calendar last modified: ${calendarUpdatedAbsolute}\nApp last synced: ${lastSyncAbsolute}`
+    : `App last synced: ${lastSyncAbsolute}`;
 
   return (
     <Card className="p-4">
@@ -49,9 +72,45 @@ export function UrlInfo({ url, lastFetch, onEdit }: UrlInfoProps) {
             {truncateUrl(url)}
           </p>
           
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <ClockIcon className="h-3 w-3" />
-            <span>Last synced {lastSyncText}</span>
+          {/* Desktop: Single line with bullet separator */}
+          <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
+            <ClockIcon className="h-3 w-3 shrink-0" />
+            {calendarUpdatedText ? (
+              <div className="flex items-center gap-2" title={tooltipText}>
+                {isCalendarStale && (
+                  <span title={staleWarning}>
+                    <AlertTriangleIcon className="h-3 w-3 text-amber-500" />
+                  </span>
+                )}
+                <span>Calendar updated {calendarUpdatedText}</span>
+                <span className="text-muted-foreground/50">•</span>
+                <span>Synced {lastSyncText}</span>
+              </div>
+            ) : (
+              <span title={tooltipText}>
+                Synced {lastSyncText}
+              </span>
+            )}
+          </div>
+          
+          {/* Mobile: Two lines stacked */}
+          <div className="flex flex-col gap-1 sm:hidden text-xs text-muted-foreground">
+            {calendarUpdatedText && (
+              <div className="flex items-center gap-2" title={calendarUpdatedAbsolute || undefined}>
+                <ClockIcon className="h-3 w-3 shrink-0" />
+                {isCalendarStale && (
+                  <span title={staleWarning}>
+                    <AlertTriangleIcon className="h-3 w-3 text-amber-500 shrink-0" />
+                  </span>
+                )}
+                <span>Calendar updated {calendarUpdatedText}</span>
+              </div>
+            )}
+            <div className="flex items-center gap-2" title={lastSyncAbsolute}>
+              {!calendarUpdatedText && <ClockIcon className="h-3 w-3 shrink-0" />}
+              {calendarUpdatedText && <span className="w-3" />}
+              <span>Synced {lastSyncText}</span>
+            </div>
           </div>
         </div>
 
