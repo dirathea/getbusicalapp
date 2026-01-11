@@ -8,7 +8,7 @@ const app = new Hono();
 const port = parseInt(process.env.PORT || "3000", 10);
 const allowedOrigin = process.env.ALLOWED_ORIGIN || "*";
 
-console.log("🚀 Starting SnapCal server...");
+console.log("🚀 Starting BusiCal server...");
 console.log(`📡 Port: ${port}`);
 console.log(`🔒 CORS Origin: ${allowedOrigin}`);
 
@@ -33,7 +33,7 @@ app.get(
   })
 );
 
-console.log(`✅ SnapCal server ready on http://localhost:${port}`);
+console.log(`✅ BusiCal server ready on http://localhost:${port}`);
 
 // Export Bun server configuration
 export default {

@@ -27,7 +27,7 @@ function getICSTimestamp(): string {
 function generateUID(): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 15);
-  return `${timestamp}-${random}@snapcal.app`;
+  return `${timestamp}-${random}@busical.app`;
 }
 
 /**
@@ -82,7 +82,7 @@ export function generateICSContent(event: SyncEventData): string {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//SnapCal//EN',
+    'PRODID:-//BusiCal//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'BEGIN:VEVENT',

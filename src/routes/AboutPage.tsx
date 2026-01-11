@@ -12,9 +12,9 @@ export function AboutPage() {
     <div className="w-full max-w-3xl mx-auto space-y-8">
       {/* Hero Section */}
       <div className="space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight">About SnapCal</h1>
+        <h1 className="text-3xl font-bold tracking-tight">About BusiCal</h1>
         <p className="text-lg text-muted-foreground">
-          Sync your personal calendar events to your work calendar without exposing your privacy.
+          Sync your personal calendar events to your work calendar — with privacy.
         </p>
       </div>
 
@@ -91,7 +91,7 @@ export function AboutPage() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                SnapCal stores nothing on any server. Your calendar data stays on your device.
+                BusiCal stores nothing on any server. Your calendar data stays on your device.
               </p>
             </CardContent>
           </Card>
@@ -125,7 +125,7 @@ export function AboutPage() {
         <h2 className="text-2xl font-semibold tracking-tight">Transparency on CORS</h2>
         <div className="prose prose-sm dark:prose-invert max-w-none">
           <p>
-            SnapCal uses a Cloudflare Worker as a CORS proxy to fetch your calendar data. This is
+            BusiCal uses a Cloudflare Worker as a CORS proxy to fetch your calendar data. This is
             necessary because browsers block direct requests to calendar URLs due to Cross-Origin
             Resource Sharing (CORS) security restrictions.
           </p>
@@ -177,12 +177,12 @@ export function AboutPage() {
             <div className="flex-1">
               <h3 className="font-medium">FAQ</h3>
               <p className="text-sm text-muted-foreground">
-                Common questions about privacy, security, and how SnapCal works
+                Common questions about privacy, security, and how BusiCal works
               </p>
             </div>
           </a>
           <a
-            href="https://github.com/dirathea/snapcal/blob/main/PRIVACY.md"
+            href="https://github.com/dirathea/getbusicalapp/blob/main/PRIVACY.md"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 p-4 border rounded-lg hover:bg-muted/50 transition-colors"
@@ -196,7 +196,7 @@ export function AboutPage() {
             <ExternalLink className="h-4 w-4 text-muted-foreground" />
           </a>
           <a
-            href="https://github.com/dirathea/snapcal"
+            href="https://github.com/dirathea/getbusicalapp"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 p-4 border rounded-lg hover:bg-muted/50 transition-colors"
@@ -210,7 +210,7 @@ export function AboutPage() {
             <Github className="h-4 w-4 text-muted-foreground" />
           </a>
           <a
-            href="https://github.com/dirathea/snapcal/blob/main/DEPLOYMENT.md"
+            href="https://github.com/dirathea/getbusicalapp/blob/main/DEPLOYMENT.md"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 p-4 border rounded-lg hover:bg-muted/50 transition-colors"

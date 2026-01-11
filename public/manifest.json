@@ -1,7 +1,7 @@
 {
-  "name": "SnapCal",
-  "short_name": "SnapCal",
-  "description": "Sync calendar events to your work calendar privately",
+  "name": "BusiCal",
+  "short_name": "BusiCal",
+  "description": "Sync calendar events to your work calendar — with privacy",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",

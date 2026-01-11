@@ -1,9 +1,9 @@
 import type { CalendarEvent, StorageData } from '@/types';
 
 const STORAGE_KEYS = {
-  ICS_URL: 'snapcal_ics_url',
-  CACHED_EVENTS: 'snapcal_cached_events',
-  LAST_FETCH: 'snapcal_last_fetch',
+  ICS_URL: 'busical_ics_url',
+  CACHED_EVENTS: 'busical_cached_events',
+  LAST_FETCH: 'busical_last_fetch',
 } as const;
 
 /**
@@ -82,7 +82,7 @@ export function getLastFetch(): number | null {
 }
 
 /**
- * Clear all SnapCal data from localStorage
+ * Clear all BusiCal data from localStorage
  */
 export function clearStorage(): void {
   try {

@@ -6,7 +6,7 @@ export function InstructionsGuide() {
       {/* Header */}
       <div className="flex items-center gap-2">
         <span className="text-base">📖</span>
-        <h3 className="text-sm font-medium">How SnapCal Works</h3>
+        <h3 className="text-sm font-medium">How BusiCal Works</h3>
       </div>
 
       {/* 3-Step Visual Flow */}

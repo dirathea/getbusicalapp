@@ -4,7 +4,7 @@
 
 ## Our Commitment
 
-SnapCal is built with privacy as the foundation. We believe your calendar data is personal and should remain under your control.
+BusiCal is built with privacy as the foundation. We believe your calendar data is personal and should remain under your control.
 
 ## Data We DO NOT Collect or Store
 
@@ -17,7 +17,7 @@ SnapCal is built with privacy as the foundation. We believe your calendar data i
 - ❌ IP addresses
 - ❌ Usage patterns
 
-## How SnapCal Works
+## How BusiCal Works
 
 ### 1. Local Storage Only
 
@@ -30,7 +30,7 @@ This data **never leaves your device** except when fetching calendar updates.
 
 ### 2. CORS Proxy (Pass-Through Only)
 
-Because browsers block direct requests to calendar URLs (CORS restrictions), SnapCal uses a Cloudflare Worker as a proxy.
+Because browsers block direct requests to calendar URLs (CORS restrictions), BusiCal uses a Cloudflare Worker as a proxy.
 
 **What the proxy does:**
 - Receives your calendar URL from your browser
@@ -54,7 +54,7 @@ When you sync an event to your work calendar:
 - No backend server involved
 - No authentication tokens
 - Calendar providers (Google, Outlook) handle the actual event creation
-- SnapCal never sees if you saved the event or not
+- BusiCal never sees if you saved the event or not
 
 ## Third-Party Services
 
@@ -64,7 +64,7 @@ Our proxy runs on Cloudflare Workers infrastructure. Cloudflare may collect:
 - Request metadata (timestamp, region, status codes)
 - Performance metrics
 
-However, SnapCal's proxy implementation:
+However, BusiCal's proxy implementation:
 - Does not log calendar URLs or content
 - Does not enable Cloudflare's logging features
 - Processes requests in memory only
@@ -75,7 +75,7 @@ However, SnapCal's proxy implementation:
 
 When you generate your ICS URL from Google Calendar, Outlook, or other providers, and when you sync events back:
 - You're subject to their privacy policies
-- SnapCal has no control over their data handling
+- BusiCal has no control over their data handling
 - They may log your access to calendar URLs
 - They process calendar event creation when you sync
 
@@ -83,15 +83,15 @@ When you generate your ICS URL from Google Calendar, Outlook, or other providers
 
 ## Open Source Transparency
 
-SnapCal is fully open source. You can:
-- Review the code: https://github.com/dirathea/snapcal
+BusiCal is fully open source. You can:
+- Review the code: https://github.com/dirathea/busical
 - Verify there's no data collection
 - See exactly what the proxy does: `worker/app.ts`
 - Check client-side storage: `src/lib/storage.ts`
 
 ## Self-Hosting
 
-Want complete control? Self-host SnapCal:
+Want complete control? Self-host BusiCal:
 - Deploy your own Cloudflare Worker
 - No data ever touches third-party infrastructure
 - Full transparency and control
@@ -103,7 +103,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for instructions.
 Data stored in your browser's localStorage:
 - **Purpose:** Save your calendar URL and cache events for offline viewing
 - **Control:** You can clear this anytime via browser settings or the app's "Clear Data" button
-- **Scope:** Only accessible to SnapCal running on the same domain
+- **Scope:** Only accessible to BusiCal running on the same domain
 - **Persistence:** Survives browser restarts but can be cleared by you
 
 ## Security Measures
@@ -127,8 +127,8 @@ If we ever need to change this policy, we'll:
 ## Contact
 
 Questions or concerns?
-- GitHub Issues: https://github.com/dirathea/snapcal/issues
-- Open a discussion: https://github.com/dirathea/snapcal/discussions
+- GitHub Issues: https://github.com/dirathea/busical/issues
+- Open a discussion: https://github.com/dirathea/busical/discussions
 
 ## Summary
 

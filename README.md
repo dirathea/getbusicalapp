@@ -1,6 +1,6 @@
-# SnapCal 📅
+# BusiCal 📅
 
-A privacy-first Progressive Web App (PWA) that helps you sync personal calendar events to your work calendar without exposing sensitive details.
+A privacy-first Progressive Web App (PWA) that helps you sync personal calendar events to your work calendar — with privacy.
 
 ## Features
 
@@ -41,6 +41,8 @@ The app will be available at `http://localhost:5173`
 4. **Choose Platform**: Select Google Calendar, Outlook, or download .ics file
 5. **Privacy Protected**: Event syncs with minimal details ("Synced Event", marked as busy)
 
+Perfect for those who had a busy day ✨
+
 ## Getting Your ICS URL
 
 ### Google Calendar
@@ -66,7 +68,7 @@ The app will be available at `http://localhost:5173`
 
 ## CORS Proxy Architecture
 
-SnapCal uses a Cloudflare Worker as a CORS proxy to fetch ICS calendar files. This is necessary because browsers block direct requests to calendar URLs due to CORS (Cross-Origin Resource Sharing) restrictions.
+BusiCal uses a Cloudflare Worker as a CORS proxy to fetch ICS calendar files. This is necessary because browsers block direct requests to calendar URLs due to CORS (Cross-Origin Resource Sharing) restrictions.
 
 ### How It Works
 
@@ -110,8 +112,8 @@ Want complete control? Deploy your own proxy:
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/dirathea/snapcal
-cd snapcal
+git clone https://github.com/dirathea/getbusicalapp
+cd getbusicalapp
 
 # 2. Configure your domain
 # Edit wrangler.jsonc and set ALLOWED_ORIGIN

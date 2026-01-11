@@ -20,7 +20,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: ${{ github.repository_owner }}/getbusicalapp
 
 jobs:
   build-and-push:
@@ -66,8 +66,8 @@ jobs:
             type=sha,prefix=sha-
             type=raw,value=latest,enable={{is_default_branch}}
           labels: |
-            org.opencontainers.image.title=SnapCal
-            org.opencontainers.image.description=Sync calendar events to your work calendar privately
+            org.opencontainers.image.title=BusiCal
+            org.opencontainers.image.description=Sync calendar events to your work calendar — with privacy
             org.opencontainers.image.vendor=dirathea
       
       - name: Build and push Docker image

@@ -1,4 +1,4 @@
-# SnapCal Fixes Applied ✅
+# BusiCal Fixes Applied ✅
 
 ## Issues Fixed
 
@@ -219,7 +219,7 @@ The worker is configured in `wrangler.jsonc`:
 
 ```jsonc
 {
-  "name": "snapcal",
+  "name": "busical",
   "main": "./worker/index.ts",
   "assets": {
     "directory": "./dist/",
@@ -241,8 +241,8 @@ npx wrangler deploy
 ```
 
 The worker serves both:
-- Frontend: `https://snapcal.pages.dev/*`
-- API: `https://snapcal.pages.dev/proxy?url=...`
+- Frontend: `https://busical.pages.dev/*`
+- API: `https://busical.pages.dev/proxy?url=...`
 
 ---
 

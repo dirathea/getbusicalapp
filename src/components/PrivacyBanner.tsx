@@ -11,8 +11,8 @@ export function PrivacyBanner() {
       </AlertTitle>
       <AlertDescription className="text-xs space-y-2">
         <p>
-          SnapCal uses a CORS proxy to fetch your calendar data. 
-          <strong> No data is stored, logged, or saved on our servers</strong> – 
+          BusiCal uses a CORS proxy to fetch your calendar data.
+          <strong> No data is stored, logged, or saved on our servers</strong> –
           everything stays in your browser.
         </p>
         <p>

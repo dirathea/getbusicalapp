@@ -1,4 +1,4 @@
-# SnapCal Setup Guide
+# BusiCal Setup Guide
 
 ## Initial Setup (Completed ✅)
 
@@ -215,7 +215,7 @@ If you encounter issues:
 
 ## Success!
 
-Your SnapCal app is ready to use! 🎉
+Your BusiCal app is ready to use! 🎉
 
 The dev server is running at: http://localhost:5173
 

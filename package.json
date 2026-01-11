@@ -1,5 +1,5 @@
 {
-  "name": "snapcal",
+  "name": "busical",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,12 +12,12 @@
     "dev:worker": "wrangler dev --port 8787",
     "deploy": "npm run build && wrangler deploy",
     "dev:bun": "bun run worker/bun.ts",
-    "docker:build": "docker build -t snapcal:local .",
-    "docker:run": "docker run -p 3000:3000 -e CORS_ORIGIN=* snapcal:local",
+    "docker:build": "docker build -t busical:local .",
+    "docker:run": "docker run -p 3000:3000 -e CORS_ORIGIN=* busical:local",
     "docker:dev": "docker-compose up --build",
     "docker:prod": "docker-compose up -d",
     "docker:stop": "docker-compose down",
-    "docker:logs": "docker-compose logs -f snapcal"
+    "docker:logs": "docker-compose logs -f busical"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
