@@ -26,23 +26,23 @@ export function AboutPage() {
           <CardTitle className="text-xl">Why I Built This</CardTitle>
           <CardDescription>A personal story about privacy, complexity, and finding a better way</CardDescription>
         </CardHeader>
-        <CardContent className="prose prose-sm dark:prose-invert max-w-none">
+        <CardContent className="prose prose-sm dark:prose-invert max-w-none [&>p]:mb-5">
           <p>
-            I tried to build a proper calendar sync app, but it ended up too complex. Providers like
+            I tried to build a proper calendar sync app, but it became prohibitively complex. Providers like
             Google Calendar and Outlook require extensive user agreements because once authorized,
             an app has access to ALL calendar events. This creates significant privacy risk — you're
             trusting the app with your most personal information.
           </p>
           <p>
-            After struggling with this complexity, I realized the solution was simpler: don't store
-            any data at all. Through brainstorming with AI, I discovered a safer and even better
+            The breakthrough came when I realized the solution was simpler: don't store
+            any data, period. Through brainstorming with AI, I discovered a safer and even better
             alternative: utilizing PWA features to generate and trigger native calendar events using
             ICS files. This approach avoids the OAuth complexity entirely while delivering the same
             functionality with better privacy.
           </p>
           <p>
             The only remaining challenge was CORS — a technical limitation that prevents browsers
-            from fetching calendar URLs directly. I made this process as transparent as possible,
+            from fetching calendar URLs directly. I designed the CORS proxy with complete transparency,
             with clear documentation that users can verify themselves or self-host if they want
             complete control.
           </p>
@@ -133,7 +133,7 @@ export function AboutPage() {
           </p>
           <p>
             <strong>What this means:</strong> The proxy receives your calendar URL, fetches the ICS
-            file, and immediately returns it to your browser. It does not store, log, or retain any
+            file, and returns it directly to your browser. It does not store, log, or retain any
             data. Think of it as a transparent tunnel — data flows through but nothing sticks.
           </p>
           <p>
