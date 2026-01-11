@@ -5,7 +5,7 @@ import { WeekNavigation } from '@/components/WeekNavigation';
 import { EventList } from '@/components/EventList';
 import { EventDetailsDialog } from '@/components/EventDetailsDialog';
 import { SyncDialog } from '@/components/SyncDialog';
-import { useIcsData } from '@/hooks/useIcsData';
+import { useIcsDataContext } from '@/context/IcsDataContext';
 import type { CalendarEvent } from '@/types';
 
 export function EventsPage() {
@@ -20,7 +20,7 @@ export function EventsPage() {
     weekView,
     setWeekView,
     editUrl,
-  } = useIcsData();
+  } = useIcsDataContext();
 
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [showEventDetails, setShowEventDetails] = useState(false);

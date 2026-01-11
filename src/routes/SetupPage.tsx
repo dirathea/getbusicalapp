@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router';
 import { IcsInput } from '@/components/IcsInput';
 import { InstructionsGuide } from '@/components/InstructionsGuide';
 import { PrivacyBanner } from '@/components/PrivacyBanner';
-import { useIcsData } from '@/hooks/useIcsData';
+import { useIcsDataContext } from '@/context/IcsDataContext';
 
 export function SetupPage() {
   const navigate = useNavigate();
-  const { setIcsUrl, loading } = useIcsData();
+  const { setIcsUrl, loading } = useIcsDataContext();
 
   const handleSubmit = async (url: string) => {
     await setIcsUrl(url);
