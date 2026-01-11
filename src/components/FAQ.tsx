@@ -45,8 +45,8 @@ const faqItems: FAQItem[] = [
     answer: (
       <div className="space-y-2">
         <p>
-          When you sync an event from a calendar to the destination calendar, 
-          SnapCal protects your privacy by <strong>not revealing the original event details</strong>.
+          When you sync an event from a calendar to the destination calendar,
+          BusiCal protects your privacy by <strong>not revealing the original event details</strong>.
         </p>
         <p>
           <strong>What gets synced:</strong>
@@ -111,14 +111,14 @@ const faqItems: FAQItem[] = [
     answer: (
       <div className="space-y-2">
         <p>
-          <strong>Yes!</strong> SnapCal is fully open source. You can deploy your own Cloudflare 
+          <strong>Yes!</strong> BusiCal is fully open source. You can deploy your own Cloudflare
           Worker to have complete control over the proxy.
         </p>
         <p>
           Check the{' '}
-          <a 
-            href="https://github.com/dirathea/snapcal/blob/main/DEPLOYMENT.md" 
-            target="_blank" 
+          <a
+            href="https://github.com/dirathea/getbusicalapp/blob/main/DEPLOYMENT.md"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline"
           >
@@ -139,7 +139,7 @@ const faqItems: FAQItem[] = [
           calendar. Keep this URL private, just like a password.
         </p>
         <p>
-          <strong>SnapCal stores your URL only in your browser's localStorage</strong> - it never 
+          <strong>BusiCal stores your URL only in your browser's localStorage</strong> - it never
           leaves your device except when fetching calendar updates through the proxy.
         </p>
         <p>
@@ -166,13 +166,13 @@ const faqItems: FAQItem[] = [
     answer: (
       <div className="space-y-2">
         <p>
-          SnapCal is fully open source! You can inspect the code yourself:
+          BusiCal is fully open source! You can inspect the code yourself:
         </p>
         <ul className="list-disc list-inside space-y-1 ml-4">
           <li>
-            <a 
-              href="https://github.com/dirathea/snapcal/blob/main/worker/app.ts" 
-              target="_blank" 
+            <a
+              href="https://github.com/dirathea/getbusicalapp/blob/main/worker/app.ts"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
             >
@@ -181,9 +181,9 @@ const faqItems: FAQItem[] = [
             - See exactly what the proxy does
           </li>
           <li>
-            <a 
-              href="https://github.com/dirathea/snapcal/blob/main/src/lib/icsParser.ts" 
-              target="_blank" 
+            <a
+              href="https://github.com/dirathea/getbusicalapp/blob/main/src/lib/icsParser.ts"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
             >
@@ -192,9 +192,9 @@ const faqItems: FAQItem[] = [
             - See how data is processed in your browser
           </li>
           <li>
-            <a 
-              href="https://github.com/dirathea/snapcal/blob/main/PRIVACY.md" 
-              target="_blank" 
+            <a
+              href="https://github.com/dirathea/getbusicalapp/blob/main/PRIVACY.md"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
             >

@@ -16,7 +16,7 @@ export function Header({ onRefresh, loading = false }: HeaderProps) {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <span className="text-2xl">📅</span>
-          <h1 className="text-xl font-bold">SnapCal</h1>
+          <h1 className="text-xl font-bold">BusiCal</h1>
         </Link>
         
         <div className="flex items-center gap-2">
@@ -32,7 +32,7 @@ export function Header({ onRefresh, loading = false }: HeaderProps) {
               variant="default"
               size="sm"
               onClick={handleInstall}
-              title="Install SnapCal as an app"
+              title="Install BusiCal as an app"
               className="gap-2"
             >
               <DownloadIcon className="h-4 w-4" />

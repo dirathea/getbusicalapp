@@ -51,9 +51,9 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD bun -e "try { const r = await fetch('http://localhost:3000/health'); process.exit(r.ok ? 0 : 1); } catch { process.exit(1); }" || exit 1
 
 # Set labels for metadata
-LABEL org.opencontainers.image.title="SnapCal" \
-      org.opencontainers.image.description="Sync calendar events to your work calendar privately" \
-      org.opencontainers.image.source="https://github.com/dirathea/snapcal" \
+LABEL org.opencontainers.image.title="BusiCal" \
+      org.opencontainers.image.description="Sync calendar events to your work calendar — with privacy" \
+      org.opencontainers.image.source="https://github.com/dirathea/getbusicalapp" \
       org.opencontainers.image.licenses="MIT"
 
 # Start the application

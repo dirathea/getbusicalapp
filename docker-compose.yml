@@ -1,12 +1,12 @@
 version: '3.9'
 
 services:
-  snapcal:
-    image: ghcr.io/dirathea/snapcal:latest
+  busical:
+    image: ghcr.io/dirathea/getbusicalapp:latest
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: snapcal
+    container_name: busical
     ports:
       - "3000:3000"
     environment:
@@ -23,4 +23,4 @@ services:
 
 networks:
   default:
-    name: snapcal-network
+    name: busical-network

@@ -11,7 +11,7 @@ export function FAQPage() {
           <h1 className="text-3xl font-bold">Frequently Asked Questions</h1>
         </div>
         <p className="text-muted-foreground">
-          Learn about SnapCal's privacy, security, and how the CORS proxy works.
+          Learn about BusiCal's privacy, security, and how the CORS proxy works.
         </p>
       </div>
 
@@ -53,7 +53,7 @@ export function FAQPage() {
         <h2 className="text-lg font-semibold">Additional Resources</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <a
-            href="https://github.com/dirathea/snapcal/blob/main/README.md"
+            href="https://github.com/dirathea/getbusicalapp/blob/main/README.md"
             target="_blank"
             rel="noopener noreferrer"
             className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
@@ -63,9 +63,9 @@ export function FAQPage() {
               Full technical documentation and setup guide
             </p>
           </a>
-          
+
           <a
-            href="https://github.com/dirathea/snapcal/blob/main/PRIVACY.md"
+            href="https://github.com/dirathea/getbusicalapp/blob/main/PRIVACY.md"
             target="_blank"
             rel="noopener noreferrer"
             className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
@@ -75,9 +75,9 @@ export function FAQPage() {
               Detailed privacy and data handling policy
             </p>
           </a>
-          
+
           <a
-            href="https://github.com/dirathea/snapcal/blob/main/DEPLOYMENT.md"
+            href="https://github.com/dirathea/getbusicalapp/blob/main/DEPLOYMENT.md"
             target="_blank"
             rel="noopener noreferrer"
             className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
@@ -87,9 +87,9 @@ export function FAQPage() {
               Deploy your own instance with complete control
             </p>
           </a>
-          
+
           <a
-            href="https://github.com/dirathea/snapcal"
+            href="https://github.com/dirathea/getbusicalapp"
             target="_blank"
             rel="noopener noreferrer"
             className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"

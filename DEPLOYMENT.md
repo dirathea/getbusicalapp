@@ -1,6 +1,6 @@
-# 🐳 SnapCal Docker Deployment Guide
+# 🐳 BusiCal Docker Deployment Guide
 
-This guide covers self-hosting SnapCal using Docker for complete privacy and control over your calendar data.
+This guide covers self-hosting BusiCal using Docker for complete privacy and control over your calendar data.
 
 ## Table of Contents
 - [Quick Start](#quick-start)
@@ -27,7 +27,7 @@ This guide covers self-hosting SnapCal using Docker for complete privacy and con
 Pull the latest image from GitHub Container Registry:
 
 ```bash
-docker pull ghcr.io/dirathea/snapcal:latest
+docker pull ghcr.io/dirathea/getbusicalapp:latest
 ```
 
 Run the container:
@@ -36,9 +36,9 @@ Run the container:
 docker run -d \
   -p 3000:3000 \
   -e CORS_ORIGIN="*" \
-  --name snapcal \
+  --name busical \
   --restart unless-stopped \
-  ghcr.io/dirathea/snapcal:latest
+  ghcr.io/dirathea/busical:latest
 ```
 
 Access the app at: **http://localhost:3000**
@@ -53,9 +53,9 @@ Access the app at: **http://localhost:3000**
 version: '3.9'
 
 services:
-  snapcal:
-    image: ghcr.io/dirathea/snapcal:latest
-    container_name: snapcal
+  busical:
+    image: ghcr.io/dirathea/busical:latest
+    container_name: busical
     ports:
       - "3000:3000"
     environment:
@@ -74,7 +74,7 @@ docker-compose up -d
 ### 3. View Logs
 
 ```bash
-docker-compose logs -f snapcal
+docker-compose logs -f busical
 ```
 
 ### 4. Stop the Service
@@ -101,17 +101,17 @@ docker-compose down
 ```bash
 docker run -d \
   -p 3000:3000 \
-  -e CORS_ORIGIN="https://snapcal.example.com" \
-  --name snapcal \
-  ghcr.io/dirathea/snapcal:latest
+  -e CORS_ORIGIN="https://busical.example.com" \
+  --name busical \
+  ghcr.io/dirathea/getbusicalapp:latest
 ```
 
 **Custom port:**
 ```bash
 docker run -d \
   -p 8080:3000 \
-  --name snapcal \
-  ghcr.io/dirathea/snapcal:latest
+  --name busical \
+  ghcr.io/dirathea/busical:latest
 ```
 
 ---
@@ -121,20 +121,17 @@ docker run -d \
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/dirathea/snapcal.git
-cd snapcal
-```
+git clone https://github.com/dirathea/getbusicalapp.git
+cd getbusicalapp
 
-### Build the Image
-
-```bash
-docker build -t snapcal:local .
+# Build the image
+docker build -t busical:local .
 ```
 
 ### Run Your Local Build
 
 ```bash
-docker run -p 3000:3000 snapcal:local
+docker run -p 3000:3000 busical:local
 ```
 
 ### Using npm Scripts
@@ -170,7 +167,7 @@ npm run docker:logs
 ```nginx
 server {
     listen 80;
-    server_name snapcal.example.com;
+    server_name busical.example.com;
     
     location / {
         proxy_pass http://localhost:3000;
@@ -189,7 +186,7 @@ server {
 #### Using Caddy
 
 ```caddyfile
-snapcal.example.com {
+busical.example.com {
     reverse_proxy localhost:3000
 }
 ```
@@ -204,11 +201,11 @@ Use a reverse proxy like Caddy (automatic HTTPS) or nginx with Let's Encrypt:
 version: '3.9'
 
 services:
-  snapcal:
-    image: ghcr.io/dirathea/snapcal:latest
-    container_name: snapcal
+  busical:
+    image: ghcr.io/dirathea/busical:latest
+    container_name: busical
     environment:
-      - CORS_ORIGIN=https://snapcal.example.com
+      - CORS_ORIGIN=https://busical.example.com
     restart: unless-stopped
     networks:
       - web
@@ -249,14 +246,14 @@ volumes:
 
 3. **Keep the image updated:**
    ```bash
-   docker pull ghcr.io/dirathea/snapcal:latest
+   docker pull ghcr.io/dirathea/getbusicalapp:latest
    docker-compose up -d
    ```
 
 4. **Monitor logs:**
    ```bash
-   docker-compose logs -f snapcal
-   ```
+   docker-compose logs -f busical
+```
 
 5. **Enable firewall rules:**
    - Only expose necessary ports
@@ -266,20 +263,20 @@ volumes:
 
 ## Platform Support
 
-SnapCal Docker images support multiple architectures:
+BusiCal Docker images support multiple architectures:
 
 - **linux/amd64** - Standard x86_64 systems (Intel/AMD CPUs)
 - **linux/arm64** - ARM 64-bit (Apple Silicon M1/M2/M3, AWS Graviton, Raspberry Pi 4 with 64-bit OS)
 
 Docker automatically pulls the correct image for your platform.
 
-**Note on ARM 32-bit (armv7):** The Bun runtime used by SnapCal does not provide Alpine Linux builds for 32-bit ARM. If you need to run on 32-bit ARM devices:
+**Note on ARM 32-bit (armv7):** The Bun runtime used by BusiCal does not provide Alpine Linux builds for 32-bit ARM. If you need to run on 32-bit ARM devices:
 - **Recommended:** Use Raspberry Pi OS 64-bit (supported on Raspberry Pi 3 Model B+ and later)
 - **Alternative:** Deploy using Cloudflare Workers (platform-independent, see Cloudflare Workers Deployment Guide below)
 
 ### Raspberry Pi Deployment
 
-SnapCal works great on Raspberry Pi 3 Model B+ and later with 64-bit OS:
+BusiCal works great on Raspberry Pi 3 Model B+ and later with 64-bit OS:
 
 **Prerequisites:**
 - Raspberry Pi 3 Model B+ or Raspberry Pi 4/5
@@ -293,16 +290,16 @@ uname -m
 # If it shows: armv7l (32-bit, not supported - upgrade to 64-bit OS)
 
 # Pull the image (automatically selects arm64 for 64-bit systems)
-docker pull ghcr.io/dirathea/snapcal:latest
+docker pull ghcr.io/dirathea/getbusicalapp:latest
 
 # Run with minimal resources
 docker run -d \
   -p 3000:3000 \
   --memory="256m" \
   --cpus="0.5" \
-  --name snapcal \
+  --name busical \
   --restart unless-stopped \
-  ghcr.io/dirathea/snapcal:latest
+  ghcr.io/dirathea/getbusicalapp:latest
 ```
 
 **Upgrading to 64-bit OS on Raspberry Pi:**
@@ -310,7 +307,7 @@ If you're currently running 32-bit OS and need to upgrade:
 1. Download Raspberry Pi OS 64-bit from https://www.raspberrypi.com/software/
 2. Use Raspberry Pi Imager to flash a new SD card
 3. Boot from the new 64-bit OS
-4. Install Docker and deploy SnapCal
+4. Install Docker and deploy BusiCal
 
 ---
 
@@ -337,14 +334,14 @@ curl http://localhost:3000/health
 
 Check logs:
 ```bash
-docker logs snapcal
+docker logs busical
 ```
 
 ### Port already in use
 
 Change the host port:
 ```bash
-docker run -d -p 8080:3000 --name snapcal ghcr.io/dirathea/snapcal:latest
+docker run -d -p 8080:3000 --name busical ghcr.io/dirathea/getbusicalapp:latest
 ```
 
 ### CORS errors
@@ -354,8 +351,8 @@ Set the correct origin:
 docker run -d \
   -e CORS_ORIGIN="https://your-domain.com" \
   -p 3000:3000 \
-  --name snapcal \
-  ghcr.io/dirathea/snapcal:latest
+  --name busical \
+  ghcr.io/dirathea/busical:latest
 ```
 
 ### PWA not installing
@@ -368,7 +365,7 @@ docker run -d \
 
 Try with explicit tag:
 ```bash
-docker pull ghcr.io/dirathea/snapcal:v0.0.1
+docker pull ghcr.io/dirathea/getbusicalapp:v0.0.1
 ```
 
 ### Out of memory on Raspberry Pi
@@ -378,8 +375,8 @@ Increase memory limit:
 docker run -d \
   --memory="512m" \
   -p 3000:3000 \
-  --name snapcal \
-  ghcr.io/dirathea/snapcal:latest
+  --name busical \
+  ghcr.io/dirathea/busical:latest
 ```
 
 ---
@@ -395,34 +392,34 @@ Images are tagged with:
 Example:
 ```bash
 # Latest release
-docker pull ghcr.io/dirathea/snapcal:latest
+docker pull ghcr.io/dirathea/getbusicalapp:latest
 
 # Specific version
-docker pull ghcr.io/dirathea/snapcal:v0.0.1
+docker pull ghcr.io/dirathea/getbusicalapp:v0.0.1
 
 # Specific commit
-docker pull ghcr.io/dirathea/snapcal:sha-abc123
+docker pull ghcr.io/dirathea/getbusicalapp:sha-abc123
 ```
 
 ---
 
 ## Support
 
-- **Issues:** https://github.com/dirathea/snapcal/issues
-- **Discussions:** https://github.com/dirathea/snapcal/discussions
-- **Documentation:** https://github.com/dirathea/snapcal
+- **Issues:** https://github.com/dirathea/getbusicalapp/issues
+- **Discussions:** https://github.com/dirathea/getbusicalapp/discussions
+- **Documentation:** https://github.com/dirathea/getbusicalapp
 
 ---
 
 ## License
 
-SnapCal is open source software, licensed as per the repository.
+BusiCal is open source software, licensed as per the repository.
 
 ---
 
 # ☁️ Cloudflare Workers Deployment Guide
 
-This guide covers deploying SnapCal to Cloudflare Pages + Workers for a serverless, global deployment.
+This guide covers deploying BusiCal to Cloudflare Pages + Workers for a serverless, global deployment.
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
@@ -448,8 +445,8 @@ This guide covers deploying SnapCal to Cloudflare Pages + Workers for a serverle
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/dirathea/snapcal.git
-cd snapcal
+git clone https://github.com/dirathea/getbusicalapp.git
+cd getbusicalapp
 npm install
 ```
 
@@ -467,7 +464,7 @@ Edit `wrangler.jsonc` and update the name if needed:
 
 ```jsonc
 {
-  "name": "snapcal-yourname",  // Change this to avoid conflicts
+  "name": "busical-yourname",  // Change this to avoid conflicts
   "compatibility_date": "2025-04-03",
   // ... rest of config
 }
@@ -575,8 +572,8 @@ Follow the prompts to create a new project or select existing.
 2. **Connect to Cloudflare Pages:**
    - Go to **Cloudflare Dashboard** → **Pages**
    - Click **"Create a project"**
-   - Connect your GitHub repository
-   - Select **snapcal** repository
+    - Connect your GitHub repository
+    - Select **getbusicalapp** repository
 
 3. **Configure Build Settings:**
    - **Framework preset:** Vite
@@ -596,7 +593,7 @@ Follow the prompts to create a new project or select existing.
 
 ```bash
 # Deploy with wrangler
-npx wrangler pages deploy dist/client --project-name snapcal
+npx wrangler pages deploy dist/client --project-name busical
 ```
 
 ---
@@ -743,7 +740,7 @@ npx wrangler pages deploy dist/client
 
 1. Go to **Pages** → Your project → **Custom domains**
 2. Click **"Set up a custom domain"**
-3. Enter your domain: `snapcal.yourdomain.com`
+3. Enter your domain: `busical.yourdomain.com`
 4. Follow DNS instructions (usually CNAME record)
 5. Wait for SSL certificate (automatic, ~10 minutes)
 
@@ -753,7 +750,7 @@ After adding custom domain, update environment variable:
 
 ```bash
 wrangler secret put ALLOWED_ORIGIN
-# Enter: https://snapcal.yourdomain.com
+# Enter: https://busical.yourdomain.com
 ```
 
 Or via dashboard:
@@ -783,8 +780,8 @@ Cloudflare Workers Free Tier:
 
 ## Support
 
-- **Issues:** https://github.com/dirathea/snapcal/issues
-- **Discussions:** https://github.com/dirathea/snapcal/discussions  
+- **Issues:** https://github.com/dirathea/getbusicalapp/issues
+- **Discussions:** https://github.com/dirathea/getbusicalapp/discussions  
 - **Privacy Policy:** [PRIVACY.md](PRIVACY.md)
 - **Cloudflare Docs:** https://developers.cloudflare.com/workers/
 

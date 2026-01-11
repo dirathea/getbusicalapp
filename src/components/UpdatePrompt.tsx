@@ -44,7 +44,7 @@ export function UpdatePrompt() {
           <div className="flex-1">
             <h3 className="font-semibold text-sm mb-1">Update Available</h3>
             <p className="text-xs text-muted-foreground mb-3">
-              A new version of SnapCal is available. Refresh to get the latest features and fixes.
+              A new version of BusiCal is available. Refresh to get the latest features and fixes.
             </p>
             
             <div className="flex gap-2">

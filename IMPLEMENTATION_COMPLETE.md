@@ -1,4 +1,4 @@
-# 🎉 SnapCal Implementation Complete!
+# 🎉 BusiCal Implementation Complete!
 
 ## All Features Implemented Successfully ✅
 
@@ -57,7 +57,7 @@
 ## 📁 Final File Structure
 
 ```
-snapcal/
+busical/
 ├── public/
 │   ├── icons/
 │   │   ├── web-app-manifest-192x192.png  ✅ PWA icon
@@ -137,7 +137,7 @@ npm run build
 
 Output:
 - `dist/client/` - Frontend assets
-- `dist/snapcal/` - Cloudflare Worker
+- `dist/busical/` - Cloudflare Worker
 
 ---
 
@@ -178,7 +178,7 @@ curl "http://localhost:8787/proxy?url=https://calendar.google.com/calendar/ical/
 **Desktop (Chrome):**
 1. Open DevTools → Application
 2. Check Manifest:
-   - Name: "SnapCal" ✓
+   - Name: "BusiCal" ✓
    - Icons: 4 entries (2×192, 2×512) ✓
    - Theme: #000000 ✓
 3. Check Service Worker:
@@ -235,7 +235,7 @@ server: {
 **`wrangler.jsonc`** - Cloudflare Worker config:
 ```json
 {
-  "name": "snapcal",
+  "name": "busical",
   "main": "./worker/index.ts",
   "assets": {
     "directory": "./dist/",
@@ -421,7 +421,7 @@ npm run dev:all
 
 ## 🎉 Congratulations!
 
-Your SnapCal PWA is now:
+Your BusiCal PWA is now:
 - ✅ **Fully functional** - All features working
 - ✅ **Production-ready** - Build succeeds, no errors
 - ✅ **Installable** - PWA works on iOS and Android

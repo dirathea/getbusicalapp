@@ -1,4 +1,4 @@
-# SnapCal PWA Implementation ✅
+# BusiCal PWA Implementation ✅
 
 ## Implementation Complete!
 
@@ -132,7 +132,7 @@ const VERSION = 'v1.0.0';
 ┌─────────────────────────────────────┐
 │ 🔄 Update Available                 │
 │                                     │
-│ A new version of SnapCal is         │
+│ A new version of BusiCal is         │
 │ available. Refresh to get the       │
 │ latest features and fixes.          │
 │                                     │
@@ -207,7 +207,7 @@ registration.addEventListener('updatefound', () => {
 
 ### **Desktop (Chrome DevTools)**
 - [ ] Open DevTools → Application → Manifest
-  - [ ] Verify name: "SnapCal"
+  - [ ] Verify name: "BusiCal"
   - [ ] Verify all 4 icons load (2x 192px, 2x 512px)
   - [ ] Check theme color: #000000
   - [ ] No warnings or errors
@@ -273,7 +273,7 @@ Expected output:
 ✓ built in ~1.5s
 dist/client/index.html
 dist/client/assets/...
-dist/snapcal/index.js (worker)
+dist/busical/index.js (worker)
 ```
 
 ### **Step 2: Deploy to Cloudflare**
@@ -329,7 +329,7 @@ All should return `200 OK`.
 dist/client/index.html          2.81 kB  (includes SW registration)
 dist/client/assets/index.js   391.18 kB  (React + app code)
 dist/client/assets/index.css   65.87 kB  (Tailwind CSS)
-dist/snapcal/index.js          64.34 kB  (Cloudflare Worker)
+dist/busical/index.js          64.34 kB  (Cloudflare Worker)
 
 Gzipped sizes:
   JS:  120.91 kB
@@ -515,7 +515,7 @@ navigator.serviceWorker.getRegistration()
 
 ## ✨ Summary
 
-Your SnapCal PWA is now:
+Your BusiCal PWA is now:
 - ✅ **Installable** on iOS and Android
 - ✅ **Minimal** with no unnecessary caching
 - ✅ **Update-aware** with user notification

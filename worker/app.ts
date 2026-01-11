@@ -94,7 +94,7 @@ const setup = <T extends Hono = Hono>(app: T, env?: Env): T => {
       const response = await fetch(url, {
         method: "GET",
         headers: {
-          "User-Agent": "SnapCal-Proxy/1.0 (Calendar Sync App)",
+          "User-Agent": "BusiCal-Proxy/1.0 (Calendar Sync App)",
           Accept: "text/calendar, text/plain, */*",
         },
       });
@@ -214,7 +214,7 @@ const setup = <T extends Hono = Hono>(app: T, env?: Env): T => {
       const response = await fetch(url, {
         method: "GET",
         headers: {
-          "User-Agent": "SnapCal-Proxy/1.0",
+          "User-Agent": "BusiCal-Proxy/1.0",
           Accept: "text/calendar, text/plain, */*",
         },
       });
