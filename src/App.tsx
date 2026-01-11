@@ -4,6 +4,7 @@ import { Root } from '@/routes/Root';
 import { EventsPage } from '@/routes/EventsPage';
 import { SetupPage } from '@/routes/SetupPage';
 import { FAQPage } from '@/routes/FAQPage';
+import { AboutPage } from '@/routes/AboutPage';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: 'faq',
         element: <FAQPage />,
+      },
+      {
+        path: 'about',
+        element: <AboutPage />,
       },
     ],
   },

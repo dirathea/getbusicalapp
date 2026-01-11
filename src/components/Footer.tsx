@@ -1,3 +1,5 @@
+import { Link } from 'react-router';
+
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -19,6 +21,14 @@ export function Footer() {
               dirathea
             </a>
             {' '}from Berlin with 🧡 {currentYear}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            <Link 
+              to="/about" 
+              className="underline hover:text-foreground transition-colors"
+            >
+              Why I built this?
+            </Link>
           </p>
         </div>
       </div>
