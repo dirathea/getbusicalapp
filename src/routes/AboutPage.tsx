@@ -35,14 +35,28 @@ export function AboutPage() {
           </p>
           <p>
             After struggling with this complexity, I realized the solution was simpler: don't store
-            any data at all. By using PWA architecture, I could build something that respects user
-            privacy while still delivering the features people need.
+            any data at all. Through brainstorming with AI, I discovered a safer and even better
+            alternative: utilizing PWA features to generate and trigger native calendar events using
+            ICS files. This approach avoids the OAuth complexity entirely while delivering the same
+            functionality with better privacy.
           </p>
           <p>
             The only remaining challenge was CORS — a technical limitation that prevents browsers
             from fetching calendar URLs directly. I made this process as transparent as possible,
             with clear documentation that users can verify themselves or self-host if they want
             complete control.
+          </p>
+          <p>
+            This project was inspired by the PWA calendar capabilities demo at{' '}
+            <a
+              href="https://progressier.com/pwa-capabilities/calendar-events-pwa-demo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              progressier.com
+            </a>
+            .
           </p>
           <p className="text-sm text-muted-foreground mt-4">
             — Aldira
