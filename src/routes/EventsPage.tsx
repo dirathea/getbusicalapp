@@ -16,6 +16,7 @@ export function EventsPage() {
     error,
     icsUrl,
     lastFetch,
+    calendarLastUpdated,
     weekView,
     setWeekView,
     editUrl,
@@ -58,7 +59,8 @@ export function EventsPage() {
     <div className="space-y-6">
       <UrlInfo 
         url={icsUrl} 
-        lastFetch={lastFetch} 
+        lastFetch={lastFetch}
+        calendarLastUpdated={calendarLastUpdated}
         onEdit={handleEditUrl}
       />
 

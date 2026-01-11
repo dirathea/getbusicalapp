@@ -4,6 +4,7 @@ const STORAGE_KEYS = {
   ICS_URL: 'busical_ics_url',
   CACHED_EVENTS: 'busical_cached_events',
   LAST_FETCH: 'busical_last_fetch',
+  CALENDAR_LAST_UPDATED: 'busical_calendar_last_updated',
 } as const;
 
 /**
@@ -82,6 +83,34 @@ export function getLastFetch(): number | null {
 }
 
 /**
+ * Save calendar last updated timestamp to localStorage
+ */
+export function saveCalendarLastUpdated(timestamp: number | null): void {
+  try {
+    if (timestamp === null) {
+      localStorage.removeItem(STORAGE_KEYS.CALENDAR_LAST_UPDATED);
+    } else {
+      localStorage.setItem(STORAGE_KEYS.CALENDAR_LAST_UPDATED, timestamp.toString());
+    }
+  } catch (error) {
+    console.error('Failed to save calendar last updated timestamp:', error);
+  }
+}
+
+/**
+ * Get calendar last updated timestamp from localStorage
+ */
+export function getCalendarLastUpdated(): number | null {
+  try {
+    const timestamp = localStorage.getItem(STORAGE_KEYS.CALENDAR_LAST_UPDATED);
+    return timestamp ? parseInt(timestamp, 10) : null;
+  } catch (error) {
+    console.error('Failed to get calendar last updated timestamp:', error);
+    return null;
+  }
+}
+
+/**
  * Clear all BusiCal data from localStorage
  */
 export function clearStorage(): void {
@@ -89,6 +118,7 @@ export function clearStorage(): void {
     localStorage.removeItem(STORAGE_KEYS.ICS_URL);
     localStorage.removeItem(STORAGE_KEYS.CACHED_EVENTS);
     localStorage.removeItem(STORAGE_KEYS.LAST_FETCH);
+    localStorage.removeItem(STORAGE_KEYS.CALENDAR_LAST_UPDATED);
   } catch (error) {
     console.error('Failed to clear storage:', error);
   }
@@ -101,6 +131,7 @@ export function getStorageData(): StorageData | null {
   const icsUrl = getIcsUrl();
   const cachedEvents = getCachedEvents();
   const lastFetch = getLastFetch();
+  const calendarLastUpdated = getCalendarLastUpdated();
 
   if (!icsUrl || !cachedEvents || !lastFetch) {
     return null;
@@ -110,5 +141,6 @@ export function getStorageData(): StorageData | null {
     icsUrl,
     cachedEvents,
     lastFetch,
+    calendarLastUpdated,
   };
 }
