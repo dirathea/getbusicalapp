@@ -15,17 +15,25 @@ function formatGoogleDate(date: Date): string {
 }
 
 /**
- * Format date for Outlook Calendar (YYYY-MM-DDTHH:mm:SSZ)
+ * Format date for Outlook Calendar (YYYY-MM-DDTHH:mm:ss±HH:mm)
+ * Uses local timezone to preserve time as displayed to user
  */
 function formatOutlookDate(date: Date): string {
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  const hours = String(date.getUTCHours()).padStart(2, '0');
-  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-
-  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  
+  // Get timezone offset (in minutes) and format as ±HH:MM
+  const offset = -date.getTimezoneOffset();
+  const offsetHours = Math.floor(Math.abs(offset) / 60);
+  const offsetMinutes = Math.abs(offset) % 60;
+  const offsetSign = offset >= 0 ? '+' : '-';
+  const offsetString = `${offsetSign}${String(offsetHours).padStart(2, '0')}:${String(offsetMinutes).padStart(2, '0')}`;
+  
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${offsetString}`;
 }
 
 /**
@@ -95,12 +103,15 @@ export function generateGoogleCalendarLink(
 
 /**
  * Generate Outlook Calendar deeplink
+ * @param event - Event data to sync
+ * @param email - Optional email to pre-select account via login_hint parameter
+ * @returns Outlook calendar deeplink URL with login_hint for account switching
  */
 export function generateOutlookCalendarLink(
   event: SyncEventData,
   email?: string
 ): string {
-  const baseUrl = 'https://outlook.live.com/calendar/deeplink/compose';
+  const baseUrl = 'https://outlook.live.com/calendar/0/deeplink/compose';
 
   const params: Record<string, string | undefined> = {
     path: '/calendar/action/compose',
@@ -110,12 +121,14 @@ export function generateOutlookCalendarLink(
     location: event.location || undefined,
     startdt: formatOutlookDate(event.startDate),
     enddt: formatOutlookDate(event.endDate),
-    freebusy: 'busy', // Show as busy
+    allday: 'false',      // Not an all-day event
+    // Note: freebusy parameter is not supported in Outlook deeplinks
+    // Events default to "busy" status automatically
   };
 
-  // Add email if provided (as required attendee)
+  // Add login_hint for account pre-selection
   if (email) {
-    params.to = email;
+    params.login_hint = email;
   }
 
   return buildUrl(baseUrl, params);

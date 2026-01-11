@@ -153,14 +153,16 @@ export function SyncDialog({ event, open, onOpenChange }: SyncDialogProps) {
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <p className="text-sm text-muted-foreground">
-                  Optional: Add your email to open the specific calendar
+                  {selectedPlatform === 'google' 
+                    ? 'Optional: Switch to the correct Google account'
+                    : 'Optional: Pre-select your Outlook account'}
                 </p>
               </div>
 
               <div className="rounded-md bg-muted p-3">
                 <p className="text-sm text-muted-foreground">
-                  You'll be redirected to {selectedPlatform === 'google' ? 'Google' : 'Outlook'} Calendar 
-                  to save the event. Make sure you're signed in to your account.
+                  You'll be redirected to {selectedPlatform === 'google' ? 'Google' : 'Outlook'} Calendar.
+                  {email && ` Account: ${email}`}
                 </p>
               </div>
 
