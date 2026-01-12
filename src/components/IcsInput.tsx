@@ -16,16 +16,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { HelpCircleIcon } from 'lucide-react';
+import { HelpCircleIcon, Eye as EyeIcon } from 'lucide-react';
 import { isValidIcsUrl } from '@/lib/icsParser';
 
 interface IcsInputProps {
   onSubmit: (url: string) => void;
   loading?: boolean;
+  initialUrl?: string;
 }
 
-export function IcsInput({ onSubmit, loading = false }: IcsInputProps) {
-  const [url, setUrl] = useState('');
+export function IcsInput({ onSubmit, loading = false, initialUrl }: IcsInputProps) {
+  const [url, setUrl] = useState(''); // Always start empty (don't pre-fill)
+  const [showUrl, setShowUrl] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -48,9 +50,14 @@ export function IcsInput({ onSubmit, loading = false }: IcsInputProps) {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle>Enter Your Calendar ICS URL</CardTitle>
+        <CardTitle>
+          {initialUrl ? 'Edit Your Calendar ICS URL' : 'Enter Your Calendar ICS URL'}
+        </CardTitle>
         <CardDescription>
-          Add your source calendar to start syncing events
+          {initialUrl 
+            ? 'Enter a new calendar URL, or reveal your current URL to view it'
+            : 'Add your source calendar to start syncing events'
+          }
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -71,8 +78,23 @@ export function IcsInput({ onSubmit, loading = false }: IcsInputProps) {
           </div>
 
           <div className="flex items-center gap-4">
+            {initialUrl && !showUrl && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setUrl(initialUrl);
+                  setShowUrl(true);
+                }}
+              >
+                <EyeIcon className="mr-2 h-4 w-4" />
+                Reveal Current URL
+              </Button>
+            )}
+            
             <Button type="submit" disabled={loading || !url.trim()}>
-              {loading ? 'Loading...' : 'Load Events'}
+              {loading ? 'Loading...' : (initialUrl ? 'Update Events' : 'Load Events')}
             </Button>
 
             <Dialog>

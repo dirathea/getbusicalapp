@@ -42,8 +42,8 @@ const setup = <T extends Hono = Hono>(app: T, env?: Env): T => {
     // Referrer policy
     c.header('Referrer-Policy', 'strict-origin-when-cross-origin');
     
-    // Content Security Policy
-    c.header('Content-Security-Policy', "default-src 'none'");
+    // Content Security Policy (strict for proxy)
+    c.header('Content-Security-Policy', "default-src 'none'; connect-src 'self'");
   });
 
   // Health check endpoint

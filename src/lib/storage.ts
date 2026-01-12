@@ -1,4 +1,5 @@
 import type { CalendarEvent, StorageData } from '@/types';
+import { encryptUrl, decryptUrl, isEncrypted, isWebCryptoSupported } from './encryption';
 
 const MAX_EMAIL_HISTORY = 5;
 
@@ -12,22 +13,54 @@ const STORAGE_KEYS = {
 } as const;
 
 /**
- * Save ICS URL to localStorage
+ * Save ICS URL to localStorage (ENCRYPTED)
  */
-export function saveIcsUrl(url: string): void {
+export async function saveIcsUrl(url: string): Promise<void> {
   try {
-    localStorage.setItem(STORAGE_KEYS.ICS_URL, url);
+    if (!isWebCryptoSupported()) {
+      throw new Error('Your browser does not support the encryption features required by BusiCal. Please use a modern browser like Chrome, Firefox, Safari, or Edge.');
+    }
+
+    const encrypted = await encryptUrl(url);
+    localStorage.setItem(STORAGE_KEYS.ICS_URL, JSON.stringify(encrypted));
   } catch (error) {
     console.error('Failed to save ICS URL to localStorage:', error);
+    throw error;
   }
 }
 
 /**
- * Get ICS URL from localStorage
+ * Get ICS URL from localStorage (DECRYPTED)
+ * Handles migration from plain text URLs (lazy migration on next setIcsUrl call)
  */
-export function getIcsUrl(): string | null {
+export async function getIcsUrl(): Promise<string | null> {
   try {
-    return localStorage.getItem(STORAGE_KEYS.ICS_URL);
+    if (!isWebCryptoSupported()) {
+      throw new Error('Your browser does not support the encryption features required by BusiCal. Please use a modern browser like Chrome, Firefox, Safari, or Edge.');
+    }
+
+    const stored = localStorage.getItem(STORAGE_KEYS.ICS_URL);
+    if (!stored) return null;
+
+    // Check if encrypted format
+    if (isEncrypted(stored)) {
+      // Decrypt
+      const encryptedData = JSON.parse(stored);
+      const decrypted = await decryptUrl(encryptedData);
+      
+      if (!decrypted) {
+        // Decryption failed - clear invalid data
+        localStorage.removeItem(STORAGE_KEYS.ICS_URL);
+        return null;
+      }
+      
+      return decrypted;
+    } else {
+      // Plain text URL (old format) - return as-is
+      // Will be encrypted on next setIcsUrl call (lazy migration)
+      console.log('[BusiCal] Found plain text URL, will encrypt on next save');
+      return stored;
+    }
   } catch (error) {
     console.error('Failed to get ICS URL from localStorage:', error);
     return null;
@@ -219,8 +252,8 @@ export function clearStorage(): void {
 /**
  * Get all storage data at once
  */
-export function getStorageData(): StorageData | null {
-  const icsUrl = getIcsUrl();
+export async function getStorageData(): Promise<StorageData | null> {
+  const icsUrl = await getIcsUrl();
   const cachedEvents = getCachedEvents();
   const lastFetch = getLastFetch();
   const calendarLastUpdated = getCalendarLastUpdated();

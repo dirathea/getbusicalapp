@@ -6,9 +6,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    develop:
+      watch:
+        - path: worker
+          action: restart
+        - path: scr
+          action: rebuild
     container_name: busical
     ports:
-      - "3000:3000"
+      - 3000
     environment:
       - PORT=3000
       - CORS_ORIGIN=*

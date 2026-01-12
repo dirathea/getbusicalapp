@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { LinkIcon, EditIcon, ClockIcon, AlertTriangleIcon } from 'lucide-react';
+import { LinkIcon, EditIcon, ClockIcon, AlertTriangleIcon, ShieldCheck as ShieldCheckIcon } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
 
 interface UrlInfoProps {
@@ -11,25 +11,14 @@ interface UrlInfoProps {
 }
 
 export function UrlInfo({ url, lastFetch, calendarLastUpdated, onEdit }: UrlInfoProps) {
-  // Truncate URL for display
-  const truncateUrl = (fullUrl: string, maxLength: number = 50) => {
+  // Mask URL to show only domain
+  const maskUrl = (fullUrl: string) => {
     try {
       const urlObj = new URL(fullUrl);
       const domain = urlObj.hostname;
-      const path = urlObj.pathname;
-      
-      if (domain.length + path.length <= maxLength) {
-        return `${domain}${path}`;
-      }
-      
-      const remainingLength = maxLength - domain.length - 3; // -3 for "..."
-      if (remainingLength > 0) {
-        return `${domain}...${path.slice(-remainingLength)}`;
-      }
-      
-      return domain;
+      return `${domain} (••••••)`;
     } catch {
-      return fullUrl.slice(0, maxLength) + (fullUrl.length > maxLength ? '...' : '');
+      return 'Protected Calendar URL (••••••)';
     }
   };
 
@@ -68,9 +57,12 @@ export function UrlInfo({ url, lastFetch, calendarLastUpdated, onEdit }: UrlInfo
             <h3 className="text-sm font-medium">Calendar Source</h3>
           </div>
           
-          <p className="text-sm text-muted-foreground truncate mb-2" title={url}>
-            {truncateUrl(url)}
-          </p>
+          <div className="flex items-center gap-2 mb-2">
+            <ShieldCheckIcon className="h-3 w-3 text-green-600 shrink-0" />
+            <p className="text-sm text-muted-foreground truncate">
+              {maskUrl(url)}
+            </p>
+          </div>
           
           {/* Desktop: Single line with bullet separator */}
           <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">

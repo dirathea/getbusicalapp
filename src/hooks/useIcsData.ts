@@ -21,11 +21,13 @@ interface UseIcsDataReturn {
   lastFetch: number | null;
   calendarLastUpdated: number | null;
   weekView: number;
+  isEditingUrl: boolean;
   setWeekView: (view: number) => void;
   setIcsUrl: (url: string) => Promise<void>;
   refresh: () => Promise<void>;
   clearData: () => void;
   editUrl: () => void;
+  editUrlWithPreservation: () => void;
 }
 
 /**
@@ -40,29 +42,42 @@ export function useIcsData(): UseIcsDataReturn {
   const [lastFetch, setLastFetch] = useState<number | null>(null);
   const [calendarLastUpdated, setCalendarLastUpdated] = useState<number | null>(null);
   const [weekView, setWeekView] = useState<number>(0);
+  const [isEditingUrl, setIsEditingUrl] = useState<boolean>(false);
 
   // Initialize from localStorage on mount
   useEffect(() => {
-    const storedUrl = getIcsUrl();
-    const cachedEvents = getCachedEvents();
-    const storedLastFetch = getLastFetch();
-    const storedCalendarLastUpdated = getCalendarLastUpdated();
+    const loadStoredData = async () => {
+      try {
+        const storedUrl = await getIcsUrl(); // Now async
+        const cachedEvents = getCachedEvents();
+        const storedLastFetch = getLastFetch();
+        const storedCalendarLastUpdated = getCalendarLastUpdated();
 
-    if (storedUrl) {
-      setIcsUrlState(storedUrl);
-    }
+        if (storedUrl) {
+          setIcsUrlState(storedUrl);
+        }
 
-    if (cachedEvents && cachedEvents.length > 0) {
-      setEvents(cachedEvents);
-    }
+        if (cachedEvents && cachedEvents.length > 0) {
+          setEvents(cachedEvents);
+        }
 
-    if (storedLastFetch) {
-      setLastFetch(storedLastFetch);
-    }
+        if (storedLastFetch) {
+          setLastFetch(storedLastFetch);
+        }
 
-    if (storedCalendarLastUpdated) {
-      setCalendarLastUpdated(storedCalendarLastUpdated);
-    }
+        if (storedCalendarLastUpdated) {
+          setCalendarLastUpdated(storedCalendarLastUpdated);
+        }
+      } catch (error) {
+        console.error('Failed to load stored data:', error);
+        // If Web Crypto not supported, show error
+        if (error instanceof Error && error.message.includes('encryption features')) {
+          setError(error.message);
+        }
+      }
+    };
+
+    loadStoredData();
   }, []);
 
   /**
@@ -89,14 +104,21 @@ export function useIcsData(): UseIcsDataReturn {
     }
   }, []);
 
-  /**
-   * Set ICS URL and fetch events
-   */
+/**
+ * Set ICS URL and fetch events
+ */
   const setIcsUrl = useCallback(
     async (url: string) => {
-      setIcsUrlState(url);
-      saveIcsUrl(url);
-      await fetchEvents(url);
+      try {
+        setIcsUrlState(url);
+        await saveIcsUrl(url); // Now async, encrypts URL
+        setIsEditingUrl(false);
+        await fetchEvents(url);
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Failed to save URL';
+        setError(errorMessage);
+        console.error('Error saving ICS URL:', error);
+      }
     },
     [fetchEvents]
   );
@@ -129,6 +151,14 @@ export function useIcsData(): UseIcsDataReturn {
    */
   const editUrl = useCallback(() => {
     setIcsUrlState('');
+    setIsEditingUrl(false);
+  }, []);
+
+  /**
+   * Edit URL with preservation - keeps current URL for editing
+   */
+  const editUrlWithPreservation = useCallback(() => {
+    setIsEditingUrl(true);
   }, []);
 
   /**
@@ -145,10 +175,12 @@ export function useIcsData(): UseIcsDataReturn {
     lastFetch,
     calendarLastUpdated,
     weekView,
+    isEditingUrl,
     setWeekView,
     setIcsUrl,
     refresh,
     clearData,
     editUrl,
+    editUrlWithPreservation,
   };
 }
