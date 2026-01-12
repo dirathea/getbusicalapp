@@ -130,6 +130,33 @@ const faqItems: FAQItem[] = [
     ),
   },
   {
+    id: 'url-encryption',
+    question: 'How is my calendar URL protected?',
+    answer: (
+      <div className="space-y-2">
+        <p>
+          Your ICS URL is automatically <strong>encrypted using AES-256-GCM</strong> before 
+          being stored in your browser. Even if someone gains access to your browser's 
+          storage, they cannot read your calendar URL without your device's unique encryption key.
+        </p>
+        <p>
+          The encryption key is derived from your device's unique characteristics and 
+          never leaves your browser. This provides strong protection against:
+        </p>
+        <ul className="list-disc list-inside space-y-1 ml-4">
+          <li>Malicious browser extensions reading localStorage</li>
+          <li>Physical access to your device by unauthorized users</li>
+          <li>Data theft from browser storage</li>
+          <li>Shared computer scenarios</li>
+        </ul>
+        <p className="text-xs text-muted-foreground mt-2">
+          <strong>Note:</strong> If you switch to a different device or browser, you'll need to 
+          re-enter your calendar URL, as the encryption is device-specific for maximum security.
+        </p>
+      </div>
+    ),
+  },
+  {
     id: 'calendar-url-safety',
     question: 'Is my calendar URL safe?',
     answer: (

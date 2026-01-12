@@ -8,7 +8,7 @@ BusiCal is built with privacy as the foundation. We believe your calendar data i
 
 ## Data We DO NOT Collect or Store
 
-- ❌ Calendar URLs
+- ❌ Calendar URLs (encrypted locally, never transmitted)
 - ❌ Calendar event data (titles, descriptions, dates, locations)
 - ❌ Personal information
 - ❌ Analytics or tracking data
@@ -22,7 +22,7 @@ BusiCal is built with privacy as the foundation. We believe your calendar data i
 ### 1. Local Storage Only
 
 All your data is stored exclusively in your browser's localStorage:
-- Calendar URL (your choice to save it)
+- Calendar URL (encrypted with AES-256-GCM, your choice to save it)
 - Cached events (for offline viewing)
 - App preferences
 
@@ -97,6 +97,61 @@ Want complete control? Self-host BusiCal:
 - Full transparency and control
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for instructions.
+
+## Calendar URL Encryption
+
+As of version 0.1.0, BusiCal automatically encrypts all ICS URLs before storing them in your browser:
+
+### Encryption Details
+
+- **Algorithm**: AES-256-GCM (Advanced Encryption Standard, 256-bit, Galois/Counter Mode)
+- **Key Derivation**: PBKDF2 with SHA-256, 100,000 iterations
+- **Key Source**: Device-specific fingerprint (browser characteristics + random salt)
+- **Storage**: Only encrypted data is stored in localStorage
+
+### What This Protects Against
+
+1. **Browser Extension Snooping**: Malicious extensions cannot read your URL from storage
+2. **Local Storage Inspection**: Viewing localStorage in DevTools shows only encrypted data
+3. **Physical Device Access**: Unauthorized users cannot retrieve your URL
+4. **Data Export/Theft**: Stolen browser data is useless without the device-specific decryption key
+
+### Device-Specific Security
+
+The encryption key is unique to your device and browser. This means:
+
+- ✅ **Better security**: Your URL cannot be decrypted on another device
+- ⚠️ **Device-specific**: Switching browsers/devices requires re-entering your URL
+- ℹ️ **No cloud sync**: Encrypted URLs cannot be synced across devices
+
+### Migration from Previous Versions
+
+If you're upgrading from a previous version with a plain-text URL:
+
+- Your existing URL is automatically encrypted on the next update
+- No action required from you
+- The migration happens silently in the background
+
+### Technical Implementation
+
+The encryption process:
+
+1. Generate device fingerprint from browser characteristics
+2. Combine with random salt (generated once, stored locally)
+3. Derive 256-bit AES key using PBKDF2 (100,000 iterations)
+4. Encrypt URL with AES-GCM and random IV
+5. Store encrypted data + IV + salt in localStorage
+
+### Browser Compatibility
+
+BusiCal requires the Web Crypto API for encryption. Supported browsers:
+
+- ✅ Chrome 37+ (2014)
+- ✅ Firefox 34+ (2014)
+- ✅ Safari 11+ (2017)
+- ✅ Edge 79+ (2020)
+
+If your browser doesn't support Web Crypto API, BusiCal will display a compatibility message.
 
 ## Browser Data
 

@@ -19,7 +19,7 @@ export function EventsPage() {
     calendarLastUpdated,
     weekView,
     setWeekView,
-    editUrl,
+    editUrlWithPreservation,
   } = useIcsDataContext();
 
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
@@ -27,7 +27,7 @@ export function EventsPage() {
   const [showSyncDialog, setShowSyncDialog] = useState(false);
 
   const handleEditUrl = () => {
-    editUrl();
+    editUrlWithPreservation();
     navigate('/setup');
   };
 

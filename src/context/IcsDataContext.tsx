@@ -11,11 +11,13 @@ interface UseIcsDataReturn {
   lastFetch: number | null;
   calendarLastUpdated: number | null;
   weekView: number;
+  isEditingUrl: boolean;
   setWeekView: (view: number) => void;
   setIcsUrl: (url: string) => Promise<void>;
   refresh: () => Promise<void>;
   clearData: () => void;
   editUrl: () => void;
+  editUrlWithPreservation: () => void;
 }
 
 const IcsDataContext = createContext<UseIcsDataReturn | null>(null);
