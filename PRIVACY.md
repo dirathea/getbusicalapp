@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last Updated:** January 2026
+**Last Updated:** January 12, 2025
 
 ## Our Commitment
 
@@ -101,10 +101,18 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for instructions.
 ## Browser Data
 
 Data stored in your browser's localStorage:
-- **Purpose:** Save your calendar URL and cache events for offline viewing
-- **Control:** You can clear this anytime via browser settings or the app's "Clear Data" button
-- **Scope:** Only accessible to BusiCal running on the same domain
-- **Persistence:** Survives browser restarts but can be cleared by you
+- **Calendar URL and cached events** - For offline viewing and quick access
+- **Email history** - Up to 5 recent email addresses per calendar platform (Google/Outlook)
+  - Used to pre-fill email when syncing events
+  - **Stored locally only in your browser, never transmitted to any server**
+  - Can be removed individually (X button in dropdown) or cleared via browser settings
+  - Google and Outlook email histories are stored separately
+
+**Control:** You can clear this data anytime via browser settings. Individual emails can be removed from history using the X button in the email dropdown.
+
+**Scope:** Only accessible to BusiCal running on the same domain.
+
+**Persistence:** Survives browser restarts but can be cleared by you at any time.
 
 ## Security Measures
 

@@ -7,7 +7,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { MailIcon, CalendarIcon, DownloadIcon, InfoIcon } from 'lucide-react';
@@ -19,6 +18,8 @@ import {
   openCalendarLink,
 } from '@/lib/calendarLinks';
 import { downloadEventAsICS } from '@/lib/icsGenerator';
+import { EmailCombobox } from '@/components/EmailCombobox';
+import { saveEmailToHistory } from '@/lib/storage';
 
 interface SyncDialogProps {
   event: CalendarEvent | null;
@@ -57,6 +58,10 @@ export function SyncDialog({ event, open, onOpenChange }: SyncDialogProps) {
     }
 
     if (url) {
+      if (email && email.trim()) {
+        saveEmailToHistory(selectedPlatform === 'system' ? 'google' : selectedPlatform, email);
+      }
+
       openCalendarLink(url);
       onOpenChange(false);
       setSelectedPlatform(null);
@@ -141,19 +146,18 @@ export function SyncDialog({ event, open, onOpenChange }: SyncDialogProps) {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  type="email"
+                <EmailCombobox
+                  platform={selectedPlatform === 'system' ? 'google' : selectedPlatform}
+                  value={email}
+                  onChange={setEmail}
                   placeholder={
                     selectedPlatform === 'google'
                       ? 'user@gmail.com'
                       : 'user@outlook.com'
                   }
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <p className="text-sm text-muted-foreground">
-                  {selectedPlatform === 'google' 
+                  {selectedPlatform === 'google'
                     ? 'Optional: Switch to the correct Google account'
                     : 'Optional: Pre-select your Outlook account'}
                 </p>
