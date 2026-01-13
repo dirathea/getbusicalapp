@@ -2,6 +2,7 @@ import { RefreshCwIcon, DownloadIcon, HelpCircle } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { useInstallPrompt } from '@/hooks/useInstallPrompt';
+import { ModeToggle } from '@/components/ModeToggle';
 
 interface HeaderProps {
   onRefresh: () => void;
@@ -49,6 +50,8 @@ export function Header({ onRefresh, loading = false }: HeaderProps) {
           >
             <RefreshCwIcon className={loading ? 'animate-spin' : ''} />
           </Button>
+
+          <ModeToggle />
         </div>
       </div>
     </header>
