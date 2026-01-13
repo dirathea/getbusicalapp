@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     
-    <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.google.com https://*.outlook.com https://*.office365.com https://*.live.com https://*.icloud.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';">
+    <!-- Content Security Policy (frame-ancestors only works via HTTP header, handled by X-Frame-Options in worker) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.google.com https://*.outlook.com https://*.office365.com https://*.live.com https://*.icloud.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
     
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
