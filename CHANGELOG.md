@@ -1,5 +1,16 @@
 # busical
 
+## 0.1.1
+
+### Patch Changes
+
+- [#21](https://github.com/dirathea/getbusicalapp/pull/21) [`e8c155f`](https://github.com/dirathea/getbusicalapp/commit/e8c155f727d3c441f5376062123b1133102a5bb6) Thanks [@dirathea](https://github.com/dirathea)! - Remove frame-ancestors from CSP meta tag
+
+  The `frame-ancestors` directive is ignored when delivered via a `<meta>` element
+  and only works via HTTP header. This was causing a console warning.
+  Clickjacking protection is already handled by `X-Frame-Options: DENY` header
+  in the worker middleware.
+
 ## 0.1.0
 
 ### Minor Changes

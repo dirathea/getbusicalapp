@@ -1,4 +1,4 @@
-const VERSION = 'v0.1.0';
+const VERSION = 'v0.1.1';
 
 // Install event - skip waiting immediately (no caching)
 self.addEventListener('install', (event) => {
