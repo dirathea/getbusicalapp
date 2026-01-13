@@ -1,5 +1,15 @@
 # busical
 
+## 0.1.2
+
+### Patch Changes
+
+- [#23](https://github.com/dirathea/getbusicalapp/pull/23) [`d25c923`](https://github.com/dirathea/getbusicalapp/commit/d25c923c2a703eb770e1508ec3e0cc4a41eb9627) Thanks [@dirathea](https://github.com/dirathea)! - Fix GitHub releases not being created by changesets workflow
+
+  Added `createGithubReleases: true` to the changesets action configuration.
+  This is required for private packages since they don't publish to npm,
+  and GitHub releases were only created after successful npm publishes.
+
 ## 0.1.1
 
 ### Patch Changes
