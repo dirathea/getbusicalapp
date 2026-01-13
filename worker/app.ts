@@ -26,7 +26,7 @@ const setup = <T extends Hono = Hono>(app: T, env?: Env): T => {
     })
   );
 
-  // Security headers middleware (applied to all routes)
+  // Security headers middleware
   app.use("*", async (c, next) => {
     await next();
 
@@ -42,13 +42,7 @@ const setup = <T extends Hono = Hono>(app: T, env?: Env): T => {
     // Referrer policy
     c.header('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-    // Note: CSP is handled by index.html meta tag for static files
-    // Proxy endpoints have their own strict CSP below
-  });
-
-  // Strict CSP for proxy endpoint only (API responses don't need scripts/styles)
-  app.use("/proxy", async (c, next) => {
-    await next();
+    // Content Security Policy (strict for proxy)
     c.header('Content-Security-Policy', "default-src 'none'; connect-src 'self'");
   });
 
