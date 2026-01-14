@@ -46,3 +46,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
+
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
+
+  docker:
+    name: Docker Build and Publish
+    needs: release
+    if: needs.release.outputs.published == 'true'
+    uses: ./.github/workflows/docker-publish.yml
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write

@@ -1,9 +1,7 @@
 name: Docker Build and Publish
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  workflow_call:
   workflow_dispatch:
 
 env:
@@ -23,9 +21,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get version from tag
+      - name: Get version from package.json
         id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -46,14 +44,13 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
+            type=raw,value=${{ steps.version.outputs.VERSION }}
             type=raw,value=latest
           labels: |
             org.opencontainers.image.title=BusiCal
             org.opencontainers.image.description=Sync calendar events to your work calendar — with privacy
             org.opencontainers.image.vendor=dirathea
+            org.opencontainers.image.version=${{ steps.version.outputs.VERSION }}
 
       - name: Build and push Docker image
         id: build
