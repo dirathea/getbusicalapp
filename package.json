@@ -1,6 +1,6 @@
 {
    "name": "@dirathea/busical",
-   "version": "0.1.3",
+   "version": "0.1.4",
    "type": "module",
    "description": "Sync calendar events to your work calendar - with privacy",
    "license": "MIT",
