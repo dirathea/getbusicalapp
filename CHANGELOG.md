@@ -1,5 +1,11 @@
 # busical
 
+## 0.1.6
+
+### Patch Changes
+
+- [#31](https://github.com/dirathea/getbusicalapp/pull/31) [`30090f3`](https://github.com/dirathea/getbusicalapp/commit/30090f398b3e2df0f47f4b36b06d36817de3de7c) Thanks [@dirathea](https://github.com/dirathea)! - ci: trigger Docker build from release workflow instead of tag push
+
 ## 0.1.5
 
 ### Patch Changes
