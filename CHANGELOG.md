@@ -1,5 +1,11 @@
 # busical
 
+## 0.1.4
+
+### Patch Changes
+
+- [#27](https://github.com/dirathea/getbusicalapp/pull/27) [`4a6d5ca`](https://github.com/dirathea/getbusicalapp/commit/4a6d5cacb965f505867fe249a2110665a814c259) Thanks [@dirathea](https://github.com/dirathea)! - Switch npm publishing to use OIDC authentication instead of static tokens for improved security.
+
 ## 0.1.3
 
 ### Patch Changes
