@@ -1,5 +1,11 @@
 # busical
 
+## 0.1.5
+
+### Patch Changes
+
+- [#29](https://github.com/dirathea/getbusicalapp/pull/29) [`e271034`](https://github.com/dirathea/getbusicalapp/commit/e271034815e2f25a279e5266364f7eef34abc308) Thanks [@dirathea](https://github.com/dirathea)! - fix: update to Node 24/npm 11 and fix npm OIDC publishing configuration
+
 ## 0.1.4
 
 ### Patch Changes
