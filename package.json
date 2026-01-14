@@ -1,8 +1,36 @@
 {
-   "name": "busical",
-   "private": true,
+   "name": "@dirathea/busical",
    "version": "0.1.2",
    "type": "module",
+   "description": "Sync calendar events to your work calendar - with privacy",
+   "license": "MIT",
+   "author": "dirathea",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/dirathea/getbusicalapp"
+   },
+   "homepage": "https://github.com/dirathea/getbusicalapp",
+   "bugs": {
+      "url": "https://github.com/dirathea/getbusicalapp/issues"
+   },
+   "keywords": [
+      "calendar",
+      "ics",
+      "sync",
+      "privacy",
+      "busical"
+   ],
+   "bin": {
+      "busical": "./bin/cli.js"
+   },
+   "files": [
+      "bin",
+      "dist"
+   ],
+   "publishConfig": {
+      "registry": "https://registry.npmjs.org",
+      "access": "public"
+   },
    "scripts": {
       "dev": "vite",
       "build": "tsc -b && vite build",
@@ -25,6 +53,7 @@
    "dependencies": {
       "@base-ui/react": "^1.0.0",
       "@fontsource-variable/inter": "^5.2.8",
+      "@hono/node-server": "^1.19.9",
       "@tailwindcss/vite": "^4.1.17",
       "class-variance-authority": "^0.7.1",
       "clsx": "^2.1.1",
