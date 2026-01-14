@@ -1,5 +1,11 @@
 # busical
 
+## 0.1.3
+
+### Patch Changes
+
+- [#25](https://github.com/dirathea/getbusicalapp/pull/25) [`9decd8f`](https://github.com/dirathea/getbusicalapp/commit/9decd8faaf8315a63bad0ca7ffeb9e1b4a114317) Thanks [@dirathea](https://github.com/dirathea)! - Release Manually
+
 ## 0.1.2
 
 ### Patch Changes
