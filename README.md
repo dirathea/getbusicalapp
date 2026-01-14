@@ -21,6 +21,26 @@ A privacy-first Progressive Web App (PWA) that helps you sync personal calendar 
 
 ## Quick Start
 
+### Run with npx/bunx
+
+The easiest way to run BusiCal locally:
+
+```bash
+# Using npm (Node.js)
+npx @dirathea/busical
+
+# Using bun
+bunx @dirathea/busical
+
+# With custom port
+npx @dirathea/busical --port 8080
+
+# With environment variables
+PORT=8080 npx @dirathea/busical
+```
+
+The app will be available at `http://localhost:3000` (or your specified port).
+
 ### Development
 
 ```bash
@@ -114,7 +134,19 @@ See our [Privacy Policy](PRIVACY.md) for complete details.
 
 ### Self-Hosting
 
-Want complete control? Deploy your own proxy:
+Want complete control? You have multiple deployment options:
+
+#### Option 1: Docker
+
+```bash
+# Run with Docker (replace VERSION with desired version)
+docker run -p 3000:3000 ghcr.io/dirathea/getbusicalapp:latest
+
+# Or with custom port and CORS origin
+docker run -p 8080:3000 -e PORT=3000 -e CORS_ORIGIN=https://yourdomain.com ghcr.io/dirathea/getbusicalapp:0.1.3
+```
+
+#### Option 2: Cloudflare Workers
 
 ```bash
 # 1. Clone the repo

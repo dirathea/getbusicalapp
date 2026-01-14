@@ -12,6 +12,7 @@ interface UseIcsDataReturn {
   calendarLastUpdated: number | null;
   weekView: number;
   isEditingUrl: boolean;
+  isInitialized: boolean;
   setWeekView: (view: number) => void;
   setIcsUrl: (url: string) => Promise<void>;
   refresh: () => Promise<void>;

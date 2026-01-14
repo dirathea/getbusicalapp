@@ -1,23 +1,46 @@
 {
-   "name": "busical",
-   "private": true,
+   "name": "@dirathea/busical",
    "version": "0.1.2",
    "type": "module",
+   "description": "Sync calendar events to your work calendar - with privacy",
+   "license": "MIT",
+   "author": "dirathea",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/dirathea/getbusicalapp"
+   },
+   "homepage": "https://github.com/dirathea/getbusicalapp",
+   "bugs": {
+      "url": "https://github.com/dirathea/getbusicalapp/issues"
+   },
+   "keywords": [
+      "calendar",
+      "ics",
+      "sync",
+      "privacy",
+      "busical"
+   ],
+   "bin": {
+      "busical": "./bin/cli.js"
+   },
+   "files": [
+      "bin",
+      "dist"
+   ],
+   "publishConfig": {
+      "registry": "https://registry.npmjs.org",
+      "access": "public"
+   },
    "scripts": {
       "dev": "vite",
-      "build": "tsc -b && vite build",
+      "build": "tsc -b && vite build && npm run build:worker",
+      "build:worker": "tsc -p tsconfig.worker.json",
       "lint": "eslint .",
       "preview": "vite preview",
       "dev:all": "concurrently 'npm run dev:worker' 'npm run dev'",
       "dev:worker": "wrangler dev --port 8787",
+      "dev:node": "node bin/cli.js",
       "deploy": "npm run build && wrangler deploy",
-      "dev:bun": "bun run worker/bun.ts",
-      "docker:build": "docker build -t busical:local .",
-      "docker:run": "docker run -p 3000:3000 -e CORS_ORIGIN=* busical:local",
-      "docker:dev": "docker-compose up --build",
-      "docker:prod": "docker-compose up -d",
-      "docker:stop": "docker-compose down",
-      "docker:logs": "docker-compose logs -f busical",
       "changeset": "changeset",
       "version-packages": "changeset version && node scripts/sync-sw-version.cjs",
       "release": "changeset publish"
@@ -25,6 +48,7 @@
    "dependencies": {
       "@base-ui/react": "^1.0.0",
       "@fontsource-variable/inter": "^5.2.8",
+      "@hono/node-server": "^1.19.9",
       "@tailwindcss/vite": "^4.1.17",
       "class-variance-authority": "^0.7.1",
       "clsx": "^2.1.1",

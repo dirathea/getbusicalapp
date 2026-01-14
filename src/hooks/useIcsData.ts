@@ -22,6 +22,7 @@ interface UseIcsDataReturn {
   calendarLastUpdated: number | null;
   weekView: number;
   isEditingUrl: boolean;
+  isInitialized: boolean;
   setWeekView: (view: number) => void;
   setIcsUrl: (url: string) => Promise<void>;
   refresh: () => Promise<void>;
@@ -43,6 +44,7 @@ export function useIcsData(): UseIcsDataReturn {
   const [calendarLastUpdated, setCalendarLastUpdated] = useState<number | null>(null);
   const [weekView, setWeekView] = useState<number>(0);
   const [isEditingUrl, setIsEditingUrl] = useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   // Initialize from localStorage on mount
   useEffect(() => {
@@ -74,6 +76,8 @@ export function useIcsData(): UseIcsDataReturn {
         if (error instanceof Error && error.message.includes('encryption features')) {
           setError(error.message);
         }
+      } finally {
+        setIsInitialized(true);
       }
     };
 
@@ -176,6 +180,7 @@ export function useIcsData(): UseIcsDataReturn {
     calendarLastUpdated,
     weekView,
     isEditingUrl,
+    isInitialized,
     setWeekView,
     setIcsUrl,
     refresh,
