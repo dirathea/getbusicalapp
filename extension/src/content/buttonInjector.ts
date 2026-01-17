@@ -11,60 +11,46 @@ const BUTTON_INJECTED_ATTR = 'data-busical-injected';
 function createShareButton(): HTMLButtonElement {
   const button = document.createElement('button');
   button.className = BUTTON_CLASS;
-  button.setAttribute('aria-label', 'Share to another calendar');
+  button.setAttribute('aria-label', 'Share to another calendar (BusiCal)');
   button.setAttribute('title', 'Share to Calendar (BusiCal)');
+  // Arrow left-right icon - indicates sync between calendars
   button.innerHTML = `
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-      <polyline points="16 6 12 2 8 6"/>
-      <line x1="12" y1="2" x2="12" y2="15"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3L4 7l4 4"/>
+      <path d="M4 7h16"/>
+      <path d="M16 21l4-4-4-4"/>
+      <path d="M20 17H4"/>
     </svg>
   `;
   return button;
 }
 
 /**
- * Find the action button container in a Google Calendar event popup
+ * Find the toolbar container in a Google Calendar event popup
+ * Uses the Delete button as anchor to find the parent toolbar
  */
-function findActionButtonContainer(popup: Element): Element | null {
-  // Strategy 1: Look for the delete/edit button group
-  // Google Calendar popups usually have a row of action buttons
+function findToolbarContainer(popup: Element): Element | null {
+  // Find the Delete event button and get its parent (the toolbar)
+  const deleteButton = popup.querySelector('[aria-label="Delete event"]');
+  if (deleteButton?.parentElement) {
+    return deleteButton.parentElement;
+  }
 
-  // Try to find button containers by looking for elements with multiple buttons
-  const buttonContainers = popup.querySelectorAll('[role="button"]');
-  if (buttonContainers.length > 0) {
-    // Find the parent that contains these buttons
-    const firstButton = buttonContainers[0];
-    const parent = firstButton.parentElement;
-    if (parent && parent.children.length >= 1) {
-      return parent;
+  // Fallback: try other common toolbar buttons
+  const fallbackSelectors = [
+    '[aria-label="Edit event"]',
+    '[aria-label="More actions"]',
+    '[aria-label="Close"]',
+  ];
+
+  for (const selector of fallbackSelectors) {
+    const button = popup.querySelector(selector);
+    if (button?.parentElement) {
+      return button.parentElement;
     }
   }
 
-  // Strategy 2: Look for specific Google Calendar action patterns
-  // The popup usually has icons/buttons for edit, delete, etc.
-  const actionIcons = popup.querySelectorAll('[data-tooltip], [aria-label]');
-  for (const icon of actionIcons) {
-    const label = icon.getAttribute('aria-label') || icon.getAttribute('data-tooltip') || '';
-    if (label.toLowerCase().includes('delete') || 
-        label.toLowerCase().includes('edit') ||
-        label.toLowerCase().includes('more')) {
-      const parent = icon.parentElement?.parentElement;
-      if (parent) {
-        return parent;
-      }
-    }
-  }
-
-  // Strategy 3: Look for the content area of the popup
-  const contentArea = popup.querySelector('[role="dialog"] > div > div') ||
-                      popup.querySelector('[tabindex="-1"]');
-  if (contentArea) {
-    return contentArea;
-  }
-
-  // Fallback: just use the popup itself
-  return popup;
+  return null;
 }
 
 /**
@@ -78,9 +64,9 @@ export function injectShareButton(popup: Element): void {
 
   popup.setAttribute(BUTTON_INJECTED_ATTR, 'true');
 
-  const container = findActionButtonContainer(popup);
-  if (!container) {
-    console.log('BusiCal: Could not find button container in popup');
+  const toolbar = findToolbarContainer(popup);
+  if (!toolbar) {
+    console.log('BusiCal: Could not find toolbar in popup');
     return;
   }
 
@@ -112,17 +98,8 @@ export function injectShareButton(popup: Element): void {
     currentPanel = result;
   });
 
-  // Insert the button
-  // Try to insert it in a logical position (near other action buttons)
-  const existingButtons = container.querySelectorAll('button, [role="button"]');
-  if (existingButtons.length > 0) {
-    // Insert after the last button
-    const lastButton = existingButtons[existingButtons.length - 1];
-    lastButton.parentElement?.insertBefore(button, lastButton.nextSibling);
-  } else {
-    // Just append to the container
-    container.appendChild(button);
-  }
+  // Insert the button as the first child of the toolbar (leftmost position)
+  toolbar.insertBefore(button, toolbar.firstChild);
 
   console.log('BusiCal: Share button injected');
 }
