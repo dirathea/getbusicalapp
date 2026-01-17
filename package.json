@@ -44,7 +44,10 @@
       "deploy": "npm run build && wrangler deploy",
       "changeset": "changeset",
       "version-packages": "changeset version && node scripts/sync-sw-version.cjs",
-      "release": "changeset publish"
+      "release": "changeset publish",
+      "extension:install": "cd extension && npm install",
+      "extension:dev": "cd extension && npm run dev",
+      "extension:build": "cd extension && npm run build"
    },
    "dependencies": {
       "@base-ui/react": "^1.0.0",
