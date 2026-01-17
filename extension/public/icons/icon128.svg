@@ -1,4 +1,9 @@
 <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="128" height="128" rx="16" fill="#1a73e8"/>
-  <path d="M32 64h64M64 32v64" stroke="white" stroke-width="10" stroke-linecap="round"/>
+  <!-- Top arrow pointing left -->
+  <path d="M48 40L32 52L48 64" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 52H96" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <!-- Bottom arrow pointing right -->
+  <path d="M80 64L96 76L80 88" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M96 76H32" stroke="white" stroke-width="8" stroke-linecap="round"/>
 </svg>
