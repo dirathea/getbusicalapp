@@ -3,7 +3,14 @@
  * All classes prefixed with 'busical-' to avoid conflicts
  */
 
-/* Share Button - matches Google Calendar's icon button style */
+/* Share Button Wrapper - cloned from Google Calendar's toolbar button wrapper
+ * Most styles are inherited from the cloned element, we just add identifier */
+.busical-share-btn-wrapper {
+  /* Inherits layout from cloned Delete button wrapper */
+}
+
+/* Share Button - minimal styles since we're inside a cloned wrapper
+ * The button structure is simpler than Google's, so we need basic button reset */
 .busical-share-btn {
   display: inline-flex;
   align-items: center;
@@ -11,7 +18,6 @@
   width: 36px;
   height: 36px;
   padding: 0;
-  margin: 0 4px;
   border: none;
   border-radius: 50%;
   background: transparent;

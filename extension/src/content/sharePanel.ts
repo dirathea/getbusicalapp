@@ -8,6 +8,36 @@ import {
 import { saveEmailToHistory, getAllEmails } from '../storage/emailHistory';
 
 /**
+ * Find the popup container by traversing up from the anchor element
+ * Google Calendar popups use aria-modal="true" on the container div
+ * The actual content is inside the first <span> child (focus traps are <div>s)
+ * This keeps interactions inside the popup so Google doesn't close it
+ */
+function findPopupContainer(anchorElement: HTMLElement): Element | null {
+  // Primary: Google Calendar popup with aria-modal="true"
+  const modal = anchorElement.closest('[aria-modal="true"]');
+  if (modal) {
+    // Get the first span child - this is the content container
+    // (the focus trap divs come before/after, but the span holds actual content)
+    const contentSpan = modal.querySelector(':scope > span');
+    if (contentSpan) return contentSpan;
+
+    // Fallback to modal itself
+    return modal;
+  }
+
+  // Fallback: role="dialog" (standard ARIA pattern)
+  const dialog = anchorElement.closest('[role="dialog"]');
+  if (dialog) {
+    const contentSpan = dialog.querySelector(':scope > span');
+    if (contentSpan) return contentSpan;
+    return dialog;
+  }
+
+  return null;
+}
+
+/**
  * Create the share panel DOM element
  */
 export function createSharePanel(
@@ -189,24 +219,36 @@ export function showSharePanel(
 
   const cleanup = () => {
     panel.remove();
+    document.removeEventListener('keydown', handleKeyDown);
+    document.removeEventListener('click', handleClickOutside);
   };
 
   const panel = createSharePanel(event, cleanup);
-  
-  // Position the panel near the anchor element
+
+  // Find the popup container to keep focus inside
+  // This prevents Google Calendar from closing the popup when interacting with our panel
+  const popupContainer = findPopupContainer(anchorElement);
+
+  // Position the panel near the anchor element using fixed positioning
+  // Fixed positioning works reliably regardless of the container's positioning context
   const rect = anchorElement.getBoundingClientRect();
-  panel.style.position = 'absolute';
-  panel.style.top = `${rect.bottom + window.scrollY + 8}px`;
-  panel.style.left = `${rect.left + window.scrollX}px`;
+  panel.style.position = 'fixed';
+  panel.style.top = `${rect.bottom + 8}px`;
+  panel.style.left = `${rect.left}px`;
   panel.style.zIndex = '10000';
 
-  document.body.appendChild(panel);
+  // Append to popup container if found (keeps focus inside), fallback to body
+  if (popupContainer) {
+    popupContainer.appendChild(panel);
+  } else {
+    console.warn('BusiCal: Could not find popup container, appending to body');
+    document.body.appendChild(panel);
+  }
 
   // Close on escape key
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       cleanup();
-      document.removeEventListener('keydown', handleKeyDown);
     }
   };
   document.addEventListener('keydown', handleKeyDown);
@@ -215,7 +257,6 @@ export function showSharePanel(
   const handleClickOutside = (e: MouseEvent) => {
     if (!panel.contains(e.target as Node) && !anchorElement.contains(e.target as Node)) {
       cleanup();
-      document.removeEventListener('click', handleClickOutside);
     }
   };
   // Delay adding the listener to avoid immediate close

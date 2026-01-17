@@ -3,54 +3,86 @@ import { showSharePanel } from './sharePanel';
 import { extractEventFromPopup } from './eventExtractor';
 
 const BUTTON_CLASS = 'busical-share-btn';
+const BUTTON_WRAPPER_CLASS = 'busical-share-btn-wrapper';
 const BUTTON_INJECTED_ATTR = 'data-busical-injected';
 
+// BusiCal share icon - arrow left-right indicating sync between calendars
+const BUSICAL_ICON_SVG = `
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 3L4 7l4 4"/>
+    <path d="M4 7h16"/>
+    <path d="M16 21l4-4-4-4"/>
+    <path d="M20 17H4"/>
+  </svg>
+`;
+
 /**
- * Create the share button element
+ * Find the Delete button's wrapper div in a Google Calendar event popup
+ * Structure: div (wrapper) > ... > button[@aria-label="Delete event"]
+ * We get ancestor::div[1] to get the immediate parent wrapper div
  */
-function createShareButton(): HTMLButtonElement {
-  const button = document.createElement('button');
-  button.className = BUTTON_CLASS;
-  button.setAttribute('aria-label', 'Share to another calendar (BusiCal)');
-  button.setAttribute('title', 'Share to Calendar (BusiCal)');
-  // Arrow left-right icon - indicates sync between calendars
-  button.innerHTML = `
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M8 3L4 7l4 4"/>
-      <path d="M4 7h16"/>
-      <path d="M16 21l4-4-4-4"/>
-      <path d="M20 17H4"/>
-    </svg>
-  `;
-  return button;
+function findDeleteButtonWrapper(popup: Element): Element | null {
+  const xpath = './/button[@aria-label="Delete event"]/ancestor::div[1]';
+
+  const result = document.evaluate(
+    xpath,
+    popup,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null
+  );
+
+  return result.singleNodeValue as Element | null;
 }
 
 /**
  * Find the toolbar container in a Google Calendar event popup
- * Uses the Delete button as anchor to find the parent toolbar
+ * Uses XPath to reliably traverse from Delete button to toolbar
+ * Structure: button -> span -> div (wrapper) -> div (toolbar)
+ * So we need ancestor::div[2]
  */
 function findToolbarContainer(popup: Element): Element | null {
-  // Find the Delete event button and get its parent (the toolbar)
-  const deleteButton = popup.querySelector('[aria-label="Delete event"]');
-  if (deleteButton?.parentElement) {
-    return deleteButton.parentElement;
-  }
+  // Find Delete button as reliable anchor, then get 2nd ancestor div (toolbar)
+  const xpath = './/button[@aria-label="Delete event"]/ancestor::div[2]';
 
-  // Fallback: try other common toolbar buttons
-  const fallbackSelectors = [
-    '[aria-label="Edit event"]',
-    '[aria-label="More actions"]',
-    '[aria-label="Close"]',
-  ];
+  const result = document.evaluate(
+    xpath,
+    popup,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null
+  );
 
-  for (const selector of fallbackSelectors) {
-    const button = popup.querySelector(selector);
-    if (button?.parentElement) {
-      return button.parentElement;
-    }
-  }
+  return result.singleNodeValue as Element | null;
+}
 
-  return null;
+/**
+ * Create the share button by cloning the Delete button's wrapper structure
+ * This ensures we inherit all of Google Calendar's styles and layout
+ */
+function createShareButtonFromDeleteButton(deleteWrapper: Element): HTMLElement | null {
+  // Clone the entire wrapper structure
+  const wrapper = deleteWrapper.cloneNode(true) as HTMLElement;
+  
+  // Clear all children - we'll add our own button
+  wrapper.innerHTML = '';
+  
+  // Add our identifier class
+  wrapper.classList.add(BUTTON_WRAPPER_CLASS);
+  
+  // Remove Google's jsaction to prevent their event handlers
+  wrapper.removeAttribute('jsaction');
+  
+  // Create our simple button element
+  const button = document.createElement('button');
+  button.className = BUTTON_CLASS;
+  button.setAttribute('aria-label', 'Share to another calendar (BusiCal)');
+  button.setAttribute('title', 'Share to Calendar (BusiCal)');
+  button.innerHTML = BUSICAL_ICON_SVG;
+  
+  wrapper.appendChild(button);
+  
+  return wrapper;
 }
 
 /**
@@ -64,18 +96,33 @@ export function injectShareButton(popup: Element): void {
 
   popup.setAttribute(BUTTON_INJECTED_ATTR, 'true');
 
+  // Find the Delete button's wrapper to clone its structure
+  const deleteWrapper = findDeleteButtonWrapper(popup);
+  if (!deleteWrapper) {
+    console.log('BusiCal: Could not find Delete button wrapper in popup');
+    return;
+  }
+
+  // Find the toolbar to insert our button
   const toolbar = findToolbarContainer(popup);
   if (!toolbar) {
     console.log('BusiCal: Could not find toolbar in popup');
     return;
   }
 
-  const button = createShareButton();
+  // Create our button by cloning the Delete button's wrapper structure
+  const wrapper = createShareButtonFromDeleteButton(deleteWrapper);
+  if (!wrapper) {
+    console.log('BusiCal: Could not create share button wrapper');
+    return;
+  }
+
+  const button = wrapper.querySelector(`.${BUTTON_CLASS}`) as HTMLButtonElement;
   
   // Store reference to the popup for event extraction
   let currentPanel: { cleanup: () => void } | null = null;
 
-  button.addEventListener('click', (e) => {
+  button.addEventListener('click', (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -98,8 +145,8 @@ export function injectShareButton(popup: Element): void {
     currentPanel = result;
   });
 
-  // Insert the button as the first child of the toolbar (leftmost position)
-  toolbar.insertBefore(button, toolbar.firstChild);
+  // Insert the wrapper (with button) as the first child of the toolbar (leftmost position)
+  toolbar.insertBefore(wrapper, toolbar.firstChild);
 
   console.log('BusiCal: Share button injected');
 }
@@ -147,6 +194,11 @@ export function isEventPopup(element: Element): boolean {
  * Remove all injected buttons (cleanup)
  */
 export function removeAllInjectedButtons(): void {
+  // Remove wrappers (which contain the buttons)
+  const wrappers = document.querySelectorAll(`.${BUTTON_WRAPPER_CLASS}`);
+  wrappers.forEach(wrapper => wrapper.remove());
+
+  // Also remove any standalone buttons (in case of legacy)
   const buttons = document.querySelectorAll(`.${BUTTON_CLASS}`);
   buttons.forEach(btn => btn.remove());
 
