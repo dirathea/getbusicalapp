@@ -17,12 +17,13 @@ const BUSICAL_ICON_SVG = `
 `;
 
 /**
- * Find the Delete button's wrapper div in a Google Calendar event popup
- * Structure: div (wrapper) > ... > button[@aria-label="Delete event"]
+ * Find the Delete/Remove button's wrapper div in a Google Calendar event popup
+ * Structure: div (wrapper) > ... > button[@aria-label="Delete event" or "Remove from this calendar"]
  * We get ancestor::div[1] to get the immediate parent wrapper div
+ * Note: Some events show "Delete event", others show "Remove from this calendar"
  */
 function findDeleteButtonWrapper(popup: Element): Element | null {
-  const xpath = './/button[@aria-label="Delete event"]/ancestor::div[1]';
+  const xpath = './/button[@aria-label="Delete event" or @aria-label="Remove from this calendar"]/ancestor::div[1]';
 
   const result = document.evaluate(
     xpath,
@@ -37,13 +38,14 @@ function findDeleteButtonWrapper(popup: Element): Element | null {
 
 /**
  * Find the toolbar container in a Google Calendar event popup
- * Uses XPath to reliably traverse from Delete button to toolbar
+ * Uses XPath to reliably traverse from Delete/Remove button to toolbar
  * Structure: button -> span -> div (wrapper) -> div (toolbar)
  * So we need ancestor::div[2]
+ * Note: Some events show "Delete event", others show "Remove from this calendar"
  */
 function findToolbarContainer(popup: Element): Element | null {
-  // Find Delete button as reliable anchor, then get 2nd ancestor div (toolbar)
-  const xpath = './/button[@aria-label="Delete event"]/ancestor::div[2]';
+  // Find Delete/Remove button as reliable anchor, then get 2nd ancestor div (toolbar)
+  const xpath = './/button[@aria-label="Delete event" or @aria-label="Remove from this calendar"]/ancestor::div[2]';
 
   const result = document.evaluate(
     xpath,
