@@ -30,6 +30,20 @@ export function Footer() {
               Why I built this?
             </Link>
             <span className="mx-2">•</span>
+            <Link 
+              to="/privacy" 
+              className="underline hover:text-foreground transition-colors"
+            >
+              Privacy Policy
+            </Link>
+            <span className="mx-2">•</span>
+            <Link 
+              to="/terms" 
+              className="underline hover:text-foreground transition-colors"
+            >
+              Terms of Service
+            </Link>
+            <span className="mx-2">•</span>
             <a
               href="https://www.buymeacoffee.com/dirathea?utm_source=busical&utm_medium=footer"
               target="_blank"

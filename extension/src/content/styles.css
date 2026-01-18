@@ -1,0 +1,357 @@
+/* BusiCal Chrome Extension Styles
+ * Matches Google Calendar's visual style
+ * All classes prefixed with 'busical-' to avoid conflicts
+ */
+
+/* Share Button Wrapper - cloned from Google Calendar's toolbar button wrapper
+ * Most styles are inherited from the cloned element, we just add identifier */
+.busical-share-btn-wrapper {
+  /* Inherits layout from cloned Delete button wrapper */
+}
+
+/* Share Button - minimal styles since we're inside a cloned wrapper
+ * The button structure is simpler than Google's, so we need basic button reset */
+.busical-share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #5f6368;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.busical-share-btn:hover {
+  background-color: rgba(95, 99, 104, 0.08);
+}
+
+.busical-share-btn:active {
+  background-color: rgba(95, 99, 104, 0.12);
+}
+
+.busical-share-btn:focus {
+  outline: none;
+  background-color: rgba(95, 99, 104, 0.12);
+}
+
+.busical-share-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Share Panel - dropdown panel style */
+.busical-share-panel {
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  font-size: 14px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  width: 280px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* Panel Header */
+.busical-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.busical-panel-title {
+  font-weight: 500;
+  font-size: 16px;
+  color: #202124;
+}
+
+.busical-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #5f6368;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.busical-close-btn:hover {
+  background-color: rgba(95, 99, 104, 0.08);
+}
+
+/* Platform Selector */
+.busical-platform-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.busical-platform-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.busical-platform-option:hover {
+  background-color: #f8f9fa;
+}
+
+.busical-platform-option:has(input:checked) {
+  border-color: #1a73e8;
+  background-color: #e8f0fe;
+}
+
+.busical-platform-option input[type="radio"] {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: #1a73e8;
+}
+
+.busical-platform-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background-color: #f1f3f4;
+  font-weight: 600;
+  font-size: 12px;
+  color: #5f6368;
+}
+
+.busical-platform-label {
+  font-size: 14px;
+  color: #202124;
+}
+
+/* Email Input Section */
+.busical-email-section {
+  margin-bottom: 12px;
+}
+
+.busical-email-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #5f6368;
+  margin-bottom: 6px;
+}
+
+.busical-email-wrapper {
+  position: relative;
+}
+
+.busical-email-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #202124;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.busical-email-input:focus {
+  outline: none;
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+}
+
+.busical-email-input::placeholder {
+  color: #9aa0a6;
+}
+
+/* Email Dropdown */
+.busical-email-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0 0;
+  padding: 4px 0;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(60, 64, 67, 0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10001;
+}
+
+.busical-email-option {
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #202124;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.busical-email-option:hover {
+  background-color: #f1f3f4;
+}
+
+/* Helper Text */
+.busical-helper-text {
+  font-size: 12px;
+  color: #5f6368;
+  margin: 0 0 16px 0;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+/* Action Button */
+.busical-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #1a73e8;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.busical-action-btn:hover {
+  background-color: #1557b0;
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
+}
+
+.busical-action-btn:active {
+  background-color: #174ea6;
+}
+
+.busical-action-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1a73e8;
+}
+
+/* Dark mode support (follows Google Calendar's dark mode) */
+@media (prefers-color-scheme: dark) {
+  .busical-share-panel {
+    background: #292a2d;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 4px 8px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .busical-panel-title {
+    color: #e8eaed;
+  }
+
+  .busical-close-btn {
+    color: #9aa0a6;
+  }
+
+  .busical-close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .busical-platform-option {
+    border-color: #5f6368;
+    background: transparent;
+  }
+
+  .busical-platform-option:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  .busical-platform-option:has(input:checked) {
+    border-color: #8ab4f8;
+    background-color: rgba(138, 180, 248, 0.12);
+  }
+
+  .busical-platform-icon {
+    background-color: #3c4043;
+    color: #9aa0a6;
+  }
+
+  .busical-platform-label {
+    color: #e8eaed;
+  }
+
+  .busical-email-label {
+    color: #9aa0a6;
+  }
+
+  .busical-email-input {
+    background: #3c4043;
+    border-color: #5f6368;
+    color: #e8eaed;
+  }
+
+  .busical-email-input:focus {
+    border-color: #8ab4f8;
+    box-shadow: 0 0 0 2px rgba(138, 180, 248, 0.3);
+  }
+
+  .busical-email-input::placeholder {
+    color: #9aa0a6;
+  }
+
+  .busical-email-dropdown {
+    background: #3c4043;
+    border-color: #5f6368;
+  }
+
+  .busical-email-option {
+    color: #e8eaed;
+  }
+
+  .busical-email-option:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .busical-helper-text {
+    background-color: #3c4043;
+    color: #9aa0a6;
+  }
+
+  .busical-action-btn {
+    background-color: #8ab4f8;
+    color: #202124;
+  }
+
+  .busical-action-btn:hover {
+    background-color: #aecbfa;
+  }
+
+  .busical-action-btn:active {
+    background-color: #669df6;
+  }
+
+  .busical-share-btn {
+    color: #9aa0a6;
+  }
+
+  .busical-share-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}

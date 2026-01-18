@@ -5,6 +5,8 @@ import { EventsPage } from '@/routes/EventsPage';
 import { SetupPage } from '@/routes/SetupPage';
 import { FAQPage } from '@/routes/FAQPage';
 import { AboutPage } from '@/routes/AboutPage';
+import { PrivacyPage } from '@/routes/PrivacyPage';
+import { TermsPage } from '@/routes/TermsPage';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 const router = createBrowserRouter([
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
       {
         path: 'about',
         element: <AboutPage />,
+      },
+      {
+        path: 'privacy',
+        element: <PrivacyPage />,
+      },
+      {
+        path: 'terms',
+        element: <TermsPage />,
       },
     ],
   },

@@ -43,8 +43,13 @@
       "dev:node": "node bin/cli.js",
       "deploy": "npm run build && wrangler deploy",
       "changeset": "changeset",
-      "version-packages": "changeset version && node scripts/sync-sw-version.cjs",
-      "release": "changeset publish"
+      "version-packages": "changeset version && node scripts/sync-sw-version.cjs && node scripts/sync-extension-version.cjs",
+      "release": "changeset publish",
+      "extension:install": "cd extension && npm install",
+      "extension:dev": "cd extension && npm run dev",
+      "extension:build": "cd extension && npm run build",
+      "extension:screenshots": "bash scripts/convert-screenshots.sh",
+      "extension:package": "node scripts/package-extension.cjs"
    },
    "dependencies": {
       "@base-ui/react": "^1.0.0",
@@ -75,6 +80,7 @@
       "@types/react": "^19.2.5",
       "@types/react-dom": "^19.2.3",
       "@vitejs/plugin-react": "^5.1.1",
+      "archiver": "^7.0.1",
       "concurrently": "^9.2.1",
       "eslint": "^9.39.1",
       "eslint-plugin-react-hooks": "^7.0.1",
