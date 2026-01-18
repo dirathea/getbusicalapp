@@ -49,6 +49,7 @@ jobs:
 
     outputs:
       published: ${{ steps.changesets.outputs.published }}
+      publishedPackages: ${{ steps.changesets.outputs.publishedPackages }}
 
   docker:
     name: Docker Build and Publish
@@ -60,3 +61,13 @@ jobs:
       packages: write
       id-token: write
       attestations: write
+
+  chrome-extension:
+    name: Chrome Extension Build
+    needs: release
+    if: needs.release.outputs.published == 'true'
+    uses: ./.github/workflows/chrome-extension-build.yml
+    with:
+      version: ${{ fromJson(needs.release.outputs.publishedPackages)[0].version }}
+    permissions:
+      contents: write

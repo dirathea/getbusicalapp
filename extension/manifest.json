@@ -1,15 +1,28 @@
 {
   "manifest_version": 3,
   "name": "BusiCal - Share to Calendar",
-  "version": "0.1.0",
+  "version": "0.1.6",
   "description": "Share Google Calendar events to other calendars with privacy protection. Events sync as 'Synced Event' marked busy.",
-  "permissions": ["storage", "activeTab"],
-  "host_permissions": ["https://calendar.google.com/*"],
+  "author": "dirathea",
+  "homepage_url": "https://getbusical.app",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://calendar.google.com/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["https://calendar.google.com/*"],
-      "js": ["content.js"],
-      "css": ["content.css"]
+      "matches": [
+        "https://calendar.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ]
     }
   ],
   "icons": {

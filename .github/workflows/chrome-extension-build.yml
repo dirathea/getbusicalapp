@@ -1,0 +1,142 @@
+name: Chrome Extension Build
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version to build (e.g., 0.1.6)'
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build (e.g., 0.1.6)'
+        required: true
+        type: string
+
+jobs:
+  build-extension:
+    name: Build Chrome Extension Package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Needed for uploading to GitHub releases
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install extension dependencies
+        run: cd extension && npm ci
+
+      - name: Sync extension version
+        run: node scripts/sync-extension-version.cjs
+
+      - name: Verify version sync
+        run: |
+          MANIFEST_VERSION=$(node -p "require('./extension/manifest.json').version")
+          EXPECTED_VERSION="${{ inputs.version }}"
+          if [ "$MANIFEST_VERSION" != "$EXPECTED_VERSION" ]; then
+            echo "❌ Version mismatch: manifest=$MANIFEST_VERSION, expected=$EXPECTED_VERSION"
+            exit 1
+          fi
+          echo "✅ Version verified: $MANIFEST_VERSION"
+
+      - name: Build extension
+        run: npm run extension:build
+
+      - name: Verify build output
+        run: |
+          echo "📦 Checking build output..."
+          ls -lah extension/dist/
+          
+          # Check required files exist
+          test -f extension/dist/manifest.json || (echo "❌ Missing manifest.json" && exit 1)
+          test -f extension/dist/content.js || (echo "❌ Missing content.js" && exit 1)
+          test -f extension/dist/content.css || (echo "❌ Missing content.css" && exit 1)
+          test -f extension/dist/icons/icon16.png || (echo "❌ Missing icon16.png" && exit 1)
+          test -f extension/dist/icons/icon48.png || (echo "❌ Missing icon48.png" && exit 1)
+          test -f extension/dist/icons/icon128.png || (echo "❌ Missing icon128.png" && exit 1)
+          
+          echo "✅ All required files present"
+
+      - name: Create zip package
+        run: |
+          cd extension/dist
+          zip -r ../busical-extension-v${{ inputs.version }}.zip .
+          cd ..
+          
+          # Show zip contents (first 20 lines)
+          echo "📄 Zip contents:"
+          unzip -l busical-extension-v${{ inputs.version }}.zip | head -20
+          
+          # Check file size
+          SIZE=$(stat -c%s "busical-extension-v${{ inputs.version }}.zip" 2>/dev/null || stat -f%z "busical-extension-v${{ inputs.version }}.zip")
+          SIZE_MB=$(echo "scale=2; $SIZE / 1024 / 1024" | bc)
+          echo ""
+          echo "📦 Package size: ${SIZE} bytes (${SIZE_MB} MB)"
+          
+          # Verify < 5MB
+          if [ "$SIZE" -gt 5242880 ]; then
+            echo "❌ Error: Package exceeds 5MB Chrome Web Store limit"
+            exit 1
+          fi
+          
+          echo "✅ Package size OK"
+
+      - name: Upload extension package as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-extension-v${{ inputs.version }}
+          path: extension/busical-extension-v${{ inputs.version }}.zip
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ inputs.version }}
+          files: extension/busical-extension-v${{ inputs.version }}.zip
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate summary
+        run: |
+          echo "# 🎉 Chrome Extension v${{ inputs.version }} Built Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Package Ready" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The Chrome extension has been built, packaged, and uploaded to GitHub Release." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Download Options" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Option 1: GitHub Release (Recommended)**" >> $GITHUB_STEP_SUMMARY
+          echo "- [Download from GitHub Release](https://github.com/${{ github.repository }}/releases/download/v${{ inputs.version }}/busical-extension-v${{ inputs.version }}.zip)" >> $GITHUB_STEP_SUMMARY
+          echo "- Permanent link, easy to share" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Option 2: GitHub Artifacts**" >> $GITHUB_STEP_SUMMARY
+          echo "- Download from this workflow run's artifacts (90-day retention)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Publish to Chrome Web Store" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. **Download** the zip using either option above" >> $GITHUB_STEP_SUMMARY
+          echo "2. **Go to** [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole)" >> $GITHUB_STEP_SUMMARY
+          echo "3. **Select** your extension (ID: \`kdpkbccpgjddfpbgikagndiipapcfald\`)" >> $GITHUB_STEP_SUMMARY
+          echo "4. **Click** \"Upload new package\"" >> $GITHUB_STEP_SUMMARY
+          echo "5. **Upload** \`busical-extension-v${{ inputs.version }}.zip\`" >> $GITHUB_STEP_SUMMARY
+          echo "6. **Review** and click \"Publish\"" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📝 **Note**: Review typically takes 1-3 business days" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **Extension URL**: https://chrome.google.com/webstore/detail/kdpkbccpgjddfpbgikagndiipapcfald" >> $GITHUB_STEP_SUMMARY
