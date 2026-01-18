@@ -1,4 +1,4 @@
-import { Github, ExternalLink, Shield, Lock, EyeOff } from 'lucide-react';
+import { Github, ExternalLink, Shield, Lock, EyeOff, Code } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -166,6 +166,72 @@ export function AboutPage() {
         </div>
       </section>
 
+      {/* Chrome Extension */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold tracking-tight">Chrome Extension Available</h2>
+        <div className="border-2 border-primary/20 rounded-lg p-6 bg-primary/5">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0">
+              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                <svg className="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2.182c.855 0 1.682.11 2.473.315L9.745 9.09a4.364 4.364 0 1 0 4.47 6.204l4.778 2.759A9.818 9.818 0 0 1 2.182 12c0-5.423 4.395-9.818 9.818-9.818zm6.982 4.437c1.516 1.694 2.445 3.925 2.445 6.381a9.757 9.757 0 0 1-.315 2.473l-6.857-3.96a4.363 4.363 0 0 0-2.164-5.894l2.891-5.007z"/>
+                </svg>
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold mb-2">One-Click Sharing from Google Calendar</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Install our Chrome extension to add share buttons directly to Google Calendar. 
+                Share events with one click without leaving your calendar.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="https://chrome.google.com/webstore"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+                >
+                  Coming Soon to Chrome Web Store
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+                <a
+                  href="https://github.com/dirathea/getbusicalapp/tree/main/extension"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-muted/50 transition-colors text-sm"
+                >
+                  <Github className="h-4 w-4" />
+                  View Extension Code
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 pt-4 border-t grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="flex items-start gap-2">
+              <Shield className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <strong className="block">Zero Network Requests</strong>
+                <span className="text-muted-foreground text-xs">All processing happens locally</span>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <Lock className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <strong className="block">Minimal Permissions</strong>
+                <span className="text-muted-foreground text-xs">Only calendar.google.com access</span>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <Code className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <strong className="block">Open Source</strong>
+                <span className="text-muted-foreground text-xs">Verify the code yourself</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Resources */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">Learn More</h2>
@@ -182,9 +248,7 @@ export function AboutPage() {
             </div>
           </a>
           <a
-            href="https://github.com/dirathea/getbusicalapp/blob/main/PRIVACY.md"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/privacy"
             className="flex items-center gap-3 p-4 border rounded-lg hover:bg-muted/50 transition-colors"
           >
             <div className="flex-1">
@@ -193,7 +257,6 @@ export function AboutPage() {
                 Detailed information on data handling and privacy guarantees
               </p>
             </div>
-            <ExternalLink className="h-4 w-4 text-muted-foreground" />
           </a>
           <a
             href="https://github.com/dirathea/getbusicalapp"
