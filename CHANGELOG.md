@@ -1,5 +1,18 @@
 # busical
 
+## 0.2.0
+
+### Minor Changes
+
+- [#34](https://github.com/dirathea/getbusicalapp/pull/34) [`fcc8518`](https://github.com/dirathea/getbusicalapp/commit/fcc8518bce5d23a5fabf65b1c953f7c2fed232f1) Thanks [@dirathea](https://github.com/dirathea)! - Add Chrome extension for sharing Google Calendar events to other calendars
+
+  - Chrome MV3 extension that injects share button into Google Calendar event popups
+  - Support for Google Calendar and Outlook Calendar deeplinks
+  - Privacy-preserving: events sync as "Synced Event" marked busy
+  - Email history stored locally via chrome.storage
+  - Vanilla JS implementation matching Google Calendar's UI style
+  - New npm scripts: `extension:install`, `extension:dev`, `extension:build`
+
 ## 0.1.6
 
 ### Patch Changes
