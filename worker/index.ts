@@ -6,7 +6,7 @@ interface Env {
 }
 
 export default {
-  fetch: (request: Request, env: Env) => {
+  async fetch(request, env, ctx) {
     const app = new Hono();
     return setup(app, env).fetch(request);
   },
