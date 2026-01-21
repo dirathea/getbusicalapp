@@ -1,5 +1,19 @@
 # busical
 
+## 0.2.1
+
+### Patch Changes
+
+- [#36](https://github.com/dirathea/getbusicalapp/pull/36) [`22debe7`](https://github.com/dirathea/getbusicalapp/commit/22debe799f55d330985ea81362a007bdae980c1c) Thanks [@dirathea](https://github.com/dirathea)! - Fix 404 errors for SPA routes in search engine crawlers
+
+  - Configure Cloudflare Workers to only process API routes (/proxy, /health)
+  - Non-API routes now served directly by static assets with SPA fallback
+  - Add robots.txt to guide search engine crawlers
+  - Add sitemap.xml for better SEO indexing
+  - Remove conflicting notFound handler from Hono app
+
+  This resolves 404 errors reported by Google Search Console for /faq and /about pages while maintaining compatibility with both Cloudflare Workers and Docker/Node.js deployments.
+
 ## 0.2.0
 
 ### Minor Changes
