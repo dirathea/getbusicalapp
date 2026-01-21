@@ -1,0 +1,14 @@
+# robots.txt for BusiCal
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /faq
+Allow: /privacy
+Allow: /terms
+
+# Disallow API endpoints
+Disallow: /proxy
+Disallow: /health
+
+# Sitemap
+Sitemap: https://getbusical.app/sitemap.xml
