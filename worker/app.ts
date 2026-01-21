@@ -293,17 +293,9 @@ const setup = <T extends Hono = Hono>(app: T, env?: Env): T => {
     }
   });
 
-  // 404 handler
-  app.notFound((c) => {
-    return c.json(
-      {
-        success: false,
-        error: "Not found",
-        path: c.req.path,
-      },
-      404
-    );
-  });
+  // 404 handler removed to allow static assets (SPA routes) to be served
+  // by Cloudflare Workers Assets with "not_found_handling": "single-page-application"
+  // API routes (/proxy, /health) are explicitly defined above and will work correctly
 
   // Error handler
   app.onError((err, c) => {
