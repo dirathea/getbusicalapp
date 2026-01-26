@@ -66,7 +66,8 @@ export function IcsInput({ onSubmit, loading = false, initialUrl }: IcsInputProp
             <Label htmlFor="ics-url">ICS URL</Label>
             <Input
               id="ics-url"
-              type="url"
+              type="text"
+              inputMode="url"
               placeholder="https://calendar.google.com/calendar/ical/..."
               value={url}
               onChange={(e) => setUrl(e.target.value)}

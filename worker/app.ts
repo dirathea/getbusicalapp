@@ -91,9 +91,36 @@ const setup = <T extends Hono = Hono>(app: T, env?: Env): T => {
           {
             success: false,
             error: "Invalid URL protocol. Only http and https are allowed.",
+            hint: "For webcal:// URLs, please convert them to https:// first",
           },
           400
         );
+      }
+
+      // Validate URL pattern to prevent malformed URLs
+      // This helps catch URLs that might pass basic parsing but are invalid
+      if (!urlObj.hostname || urlObj.hostname.length < 2) {
+        return c.json(
+          {
+            success: false,
+            error: "Invalid URL hostname",
+          },
+          400
+        );
+      }
+
+      // Check for potentially malicious URL patterns
+      const suspiciousPatterns = [/javascript:/i, /data:/i, /vbscript:/i];
+      for (const pattern of suspiciousPatterns) {
+        if (pattern.test(url)) {
+          return c.json(
+            {
+              success: false,
+              error: "URL contains disallowed protocol",
+            },
+            400
+          );
+        }
       }
 
       // Fetch the ICS file

@@ -18,7 +18,9 @@ export async function fetchICS(url: string): Promise<string> {
     const proxyUrl = getProxyUrl();
     
     // Use query parameter for GET request
-    const proxyEndpoint = `${proxyUrl}?url=${encodeURIComponent(url)}`;
+    // Decode first to avoid double-encoding already encoded URLs
+    const decodedUrl = decodeURIComponent(url);
+    const proxyEndpoint = `${proxyUrl}?url=${encodeURIComponent(decodedUrl)}`;
     
     const response = await fetch(proxyEndpoint, {
       method: 'GET',
@@ -150,22 +152,13 @@ export function parseICS(icsData: string): {
 
 /**
  * Validate ICS URL format
+ * Only checks protocol - content validation (BEGIN:VCALENDAR) handles the rest
  */
 export function isValidIcsUrl(url: string): boolean {
   try {
     const urlObj = new URL(url);
-    
-    // Must be http or https
-    if (!['http:', 'https:'].includes(urlObj.protocol)) {
-      return false;
-    }
-    
-    // Should have .ics extension or contain ical/calendar in path
-    const path = urlObj.pathname.toLowerCase();
-    const isIcsFile = path.endsWith('.ics');
-    const hasCalendarKeyword = path.includes('ical') || path.includes('calendar');
-    
-    return isIcsFile || hasCalendarKeyword;
+    // Only validate protocol - let content validation catch non-calendar responses
+    return ['http:', 'https:', 'webcal:'].includes(urlObj.protocol);
   } catch {
     return false;
   }
