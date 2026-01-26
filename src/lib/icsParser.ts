@@ -18,7 +18,9 @@ export async function fetchICS(url: string): Promise<string> {
     const proxyUrl = getProxyUrl();
     
     // Use query parameter for GET request
-    const proxyEndpoint = `${proxyUrl}?url=${encodeURIComponent(url)}`;
+    // Decode first to avoid double-encoding already encoded URLs
+    const decodedUrl = decodeURIComponent(url);
+    const proxyEndpoint = `${proxyUrl}?url=${encodeURIComponent(decodedUrl)}`;
     
     const response = await fetch(proxyEndpoint, {
       method: 'GET',
