@@ -150,22 +150,39 @@ export function parseICS(icsData: string): {
 
 /**
  * Validate ICS URL format
+ * Supports various calendar providers including Google Calendar, Outlook, Apple Calendar, etc.
  */
 export function isValidIcsUrl(url: string): boolean {
   try {
     const urlObj = new URL(url);
     
-    // Must be http or https
-    if (!['http:', 'https:'].includes(urlObj.protocol)) {
+    // Must be http or https (or webcal which will be normalized)
+    if (!['http:', 'https:', 'webcal:'].includes(urlObj.protocol)) {
       return false;
     }
     
-    // Should have .ics extension or contain ical/calendar in path
-    const path = urlObj.pathname.toLowerCase();
-    const isIcsFile = path.endsWith('.ics');
-    const hasCalendarKeyword = path.includes('ical') || path.includes('calendar');
+    // Get the full URL for pattern matching (decoded for better matching)
+    const fullUrl = url.toLowerCase();
     
-    return isIcsFile || hasCalendarKeyword;
+    // Check for common ICS URL patterns from various providers
+    // Google Calendar: calendar.google.com/calendar/ical/.../basic.ics
+    // Outlook: outlook.office.com/owa/calendar/.../calendar.ics
+    // Apple iCloud: calendarcloud.icloud.com/ical/...
+    // Generic: any URL with .ics extension or ical/calendar keywords
+    
+    // Check for .ics extension (case-insensitive)
+    const hasIcsExtension = /\.ics\b/i.test(urlObj.pathname);
+    
+    // Check for ical or calendar keywords in the URL
+    const hasCalendarKeyword = /ical|calendar/i.test(urlObj.href);
+    
+    // Check for specific known provider patterns
+    const isGoogleCalendar = /calendar\.google\.com\/ical/i.test(urlObj.href);
+    const isOutlookCalendar = /outlook\.office\.com|outlook\.live\.com/i.test(urlObj.href);
+    const isAppleCalendar = /icloud\.com|apple\.com/i.test(urlObj.href);
+    
+    // Accept if it matches any of the valid patterns
+    return hasIcsExtension || hasCalendarKeyword || isGoogleCalendar || isOutlookCalendar || isAppleCalendar;
   } catch {
     return false;
   }
