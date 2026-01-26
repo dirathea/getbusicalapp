@@ -152,36 +152,13 @@ export function parseICS(icsData: string): {
 
 /**
  * Validate ICS URL format
- * Supports various calendar providers including Google Calendar, Outlook, Apple Calendar, etc.
+ * Only checks protocol - content validation (BEGIN:VCALENDAR) handles the rest
  */
 export function isValidIcsUrl(url: string): boolean {
   try {
     const urlObj = new URL(url);
-    
-    // Must be http or https (or webcal which will be normalized)
-    if (!['http:', 'https:', 'webcal:'].includes(urlObj.protocol)) {
-      return false;
-    }
-    
-    // Check for common ICS URL patterns from various providers
-    // Google Calendar: calendar.google.com/calendar/ical/.../basic.ics
-    // Outlook: outlook.office.com/owa/calendar/.../calendar.ics
-    // Apple iCloud: calendarcloud.icloud.com/ical/...
-    // Generic: any URL with .ics extension or ical/calendar keywords
-    
-    // Check for .ics extension (case-insensitive)
-    const hasIcsExtension = /\.ics\b/i.test(urlObj.pathname);
-    
-    // Check for ical or calendar keywords in the URL
-    const hasCalendarKeyword = /ical|calendar/i.test(urlObj.href);
-    
-    // Check for specific known provider patterns
-    const isGoogleCalendar = /calendar\.google\.com\/calendar\/ical/i.test(urlObj.href);
-    const isOutlookCalendar = /outlook\.office\.com|outlook\.live\.com/i.test(urlObj.href);
-    const isAppleCalendar = /icloud\.com|apple\.com/i.test(urlObj.href);
-    
-    // Accept if it matches any of the valid patterns
-    return hasIcsExtension || hasCalendarKeyword || isGoogleCalendar || isOutlookCalendar || isAppleCalendar;
+    // Only validate protocol - let content validation catch non-calendar responses
+    return ['http:', 'https:', 'webcal:'].includes(urlObj.protocol);
   } catch {
     return false;
   }
