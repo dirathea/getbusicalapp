@@ -176,7 +176,7 @@ export function isValidIcsUrl(url: string): boolean {
     const hasCalendarKeyword = /ical|calendar/i.test(urlObj.href);
     
     // Check for specific known provider patterns
-    const isGoogleCalendar = /calendar\.google\.com\/ical/i.test(urlObj.href);
+    const isGoogleCalendar = /calendar\.google\.com\/calendar\/ical/i.test(urlObj.href);
     const isOutlookCalendar = /outlook\.office\.com|outlook\.live\.com/i.test(urlObj.href);
     const isAppleCalendar = /icloud\.com|apple\.com/i.test(urlObj.href);
     
