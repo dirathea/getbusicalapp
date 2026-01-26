@@ -1,5 +1,11 @@
 # busical
 
+## 0.3.0
+
+### Minor Changes
+
+- [#38](https://github.com/dirathea/getbusicalapp/pull/38) [`4ca9bb1`](https://github.com/dirathea/getbusicalapp/commit/4ca9bb1a2fa03637af303fbdc06cc958a189425e) Thanks [@dirathea](https://github.com/dirathea)! - Fix Google Calendar URL validation and worker proxy routing
+
 ## 0.2.1
 
 ### Patch Changes
