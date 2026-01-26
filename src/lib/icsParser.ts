@@ -163,9 +163,6 @@ export function isValidIcsUrl(url: string): boolean {
       return false;
     }
     
-    // Get the full URL for pattern matching (decoded for better matching)
-    const fullUrl = url.toLowerCase();
-    
     // Check for common ICS URL patterns from various providers
     // Google Calendar: calendar.google.com/calendar/ical/.../basic.ics
     // Outlook: outlook.office.com/owa/calendar/.../calendar.ics
